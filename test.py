@@ -1,6 +1,5 @@
-from model.model import CelaucoModel
+from service.visualization import Visualization
 
-empty_model = CelaucoModel(10)
-empty_model.step()
-empty_model.step()
-empty_model.step()
+Visualization.display_model()
+# model = CelaucoModel(agents_number=10)
+# model.run_model()
