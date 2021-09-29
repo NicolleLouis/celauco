@@ -22,6 +22,10 @@ class Visualization:
                     "Label": "Immune",
                     "Color": "Blue"
                 },
+                {
+                    "Label": "Dead",
+                    "Color": "Black"
+                },
             ],
             data_collector_name='data_collector'
         )
@@ -61,22 +65,30 @@ class Visualization:
             min_value=1,
             max_value=50,
         )
-        return agents_number, initially_infected, infection_probability, infection_duration
+        death_probability = UserSettableParameter(
+            param_type="slider",
+            name="Death probabity",
+            value=1,
+            min_value=1,
+            max_value=100,
+        )
+        return agents_number, initially_infected, infection_probability, infection_duration, death_probability
 
     @classmethod
     def display_model(cls):
         grid = CanvasGrid(cls.agent_portrayal, 10, 10, 500, 500)
-        agents_number, initially_infected, infection_probability, infection_duration = cls.get_sliders()
+        agents_number, initially_infected, infection_probability, infection_duration, death_probability = cls.get_sliders()
         server = ModularServer(
             model_cls=CelaucoModel,
             visualization_elements=[grid, cls.get_charts()],
             model_params={
                 "agents_number": agents_number,
+                "infection_probability": infection_probability,
+                "infection_duration": infection_duration,
+                "death_probability": death_probability,
                 "initially_infected": initially_infected,
                 "width": 10,
                 "height": 10,
-                "infection_probability": infection_probability,
-                "infection_duration": infection_duration,
             }
         )
         server.port = 8521

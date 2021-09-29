@@ -24,6 +24,9 @@ class CelaucoAgent(Agent):
         self.infection_duration += 1
         if self.infection_duration >= self.model.infection_duration:
             self.set_immune()
+        else:
+            if ProbabilityService.random_probability(self.model.death_probability):
+                self.set_dead()
 
     def infect_neighbours(self):
         neighbours = self.model.grid.get_cell_list_contents(self.get_neighbour_positions())
@@ -63,6 +66,12 @@ class CelaucoAgent(Agent):
         if self.state != AgentState.INFECTED:
             raise SystemError("A non infected agent cannot become immune")
         self.state = AgentState.IMMUNE
+
+    def set_dead(self):
+        if self.state != AgentState.INFECTED:
+            raise SystemError("A non infected agent cannot die")
+        self.state = AgentState.DEAD
+        self.model.kill_agent(agent=self)
 
     def display(self):
         data = {

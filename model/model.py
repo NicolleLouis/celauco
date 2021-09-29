@@ -16,6 +16,7 @@ class CelaucoModel(Model):
             height=10,
             infection_probability=25,
             infection_duration=10,
+            death_probability=1,
     ):
         super().__init__()
         self.num_agents = agents_number
@@ -28,12 +29,15 @@ class CelaucoModel(Model):
         self.running = True
         self.infection_probability = infection_probability
         self.infection_duration = infection_duration
+        self.death_probability = death_probability
+        self.number_of_dead = 0
 
         self.data_collector = DataCollector(
             model_reporters={
                 "Healthy": self.number_healthy,
                 "Infected": self.number_infected,
                 "Immune": self.number_immune,
+                "Dead": self.get_number_of_dead,
             },
         )
 
@@ -61,6 +65,10 @@ class CelaucoModel(Model):
 
         x, y = self.get_random_position()
         self.grid.place_agent(agent, (x, y))
+
+    def kill_agent(self, agent):
+        self.schedule.remove(agent)
+        self.number_of_dead += 1
 
     def get_random_position(self):
         x = self.random.randrange(self.grid.width)
@@ -106,3 +114,6 @@ class CelaucoModel(Model):
             )
         )
         return len(immune_agents)
+
+    def get_number_of_dead(self):
+        return self.number_of_dead
