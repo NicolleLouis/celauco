@@ -40,16 +40,23 @@ class Visualization:
         agents_number = UserSettableParameter(
             param_type="slider",
             name="Agent Numbers",
-            value=20,
+            value=25,
             min_value=1,
             max_value=50,
         )
         medic_number = UserSettableParameter(
             param_type="slider",
             name="Medic number",
-            value=1,
+            value=0,
             min_value=0,
-            max_value=50,
+            max_value=5,
+        )
+        gilet_josne_number = UserSettableParameter(
+            param_type="slider",
+            name="Gilet Josne number",
+            value=0,
+            min_value=0,
+            max_value=25,
         )
         initially_infected = UserSettableParameter(
             param_type="slider",
@@ -61,14 +68,14 @@ class Visualization:
         infection_probability = UserSettableParameter(
             param_type="slider",
             name="Infection probability",
-            value=25,
+            value=10,
             min_value=0,
             max_value=100,
         )
         infection_duration = UserSettableParameter(
             param_type="slider",
             name="Infection duration",
-            value=10,
+            value=30,
             min_value=1,
             max_value=50,
         )
@@ -81,11 +88,12 @@ class Visualization:
         )
         sliders = {
             "agents_number": agents_number,
-            "initially_infected": initially_infected,
+            # "initially_infected": initially_infected,
             "infection_probability": infection_probability,
             "infection_duration": infection_duration,
             "death_probability": death_probability,
             "medic_number": medic_number,
+            "gilet_josne_number": gilet_josne_number,
         }
         return sliders
 
@@ -101,8 +109,9 @@ class Visualization:
                 "infection_probability": sliders["infection_probability"],
                 "infection_duration": sliders["infection_duration"],
                 "death_probability": sliders["death_probability"],
-                "initially_infected": sliders["initially_infected"],
                 "medic_number": sliders["medic_number"],
+                "gilet_josne_number": sliders["gilet_josne_number"],
+                # "initially_infected": sliders["initially_infected"],
                 "width": 10,
                 "height": 10,
             }

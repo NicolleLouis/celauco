@@ -34,4 +34,5 @@ class Medic(CelaucoAgent):
         data = super().display()
         data["Shape"] = "images/medic"
         data["scale"] = 0.5
+        data["Layer"] = 1
         return data

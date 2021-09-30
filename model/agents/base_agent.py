@@ -128,11 +128,11 @@ class CelaucoAgent(Agent):
             "h": 0.5,
             "text_color": "white"
         }
-        if self.infection_state == InfectionState.INFECTED:
+        if self.is_infected():
             data["Color"] = "red"
-        if self.infection_state == InfectionState.IMMUNE:
+        if self.is_immune():
             data["Color"] = "blue"
-        if self.infection_knowledge_state == InfectionKnowledgeState.AWARE:
+        if self.is_aware():
             data["Color"] = "yellow"
 
         return data
