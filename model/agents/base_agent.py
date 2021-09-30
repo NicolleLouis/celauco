@@ -23,17 +23,17 @@ class CelaucoAgent(Agent):
 
     def step(self):
         self.move()
+        self.additional_step()
         if self.is_infected():
             self.infect_neighbours()
             self.infection_evolution()
-        self.additional_step()
 
     def move(self):
         new_position = self.next_position()
         self.model.grid.move_agent(self, new_position)
 
     def next_position(self):
-        if self.infection_knowledge_state == InfectionKnowledgeState.AWARE:
+        if self.is_infected() and self.is_aware():
             new_position = MovementService.avoid_agents(agent=self)
         else:
             new_position = MovementService.random_move(agent=self)
@@ -49,13 +49,13 @@ class CelaucoAgent(Agent):
 
     def infect_neighbours(self):
         neighbours = self.get_neighbors()
-        healthy_neighbours = list(
+        can_be_infected_neighbours = list(
             filter(
-                lambda neighbour: neighbour.is_healthy(),
+                lambda neighbour: neighbour.can_be_infected(),
                 neighbours
             )
         )
-        for neighbour in healthy_neighbours:
+        for neighbour in can_be_infected_neighbours:
             if ProbabilityService.random_probability(self.model.infection_probability):
                 neighbour.set_infected()
 
@@ -68,11 +68,19 @@ class CelaucoAgent(Agent):
         )
         return neighbours
 
+    def can_be_infected(self):
+        return self.infection_state == InfectionState.HEALTHY
+
+    def set_infected(self):
+        if not self.can_be_infected():
+            raise InfectionException()
+        self.infection_state = InfectionState.INFECTED
+
     def is_infected(self):
         return self.infection_state == InfectionState.INFECTED
 
     def is_healthy(self):
-        return self.infection_state == InfectionState.HEALTHY
+        return self.infection_state == InfectionState.HEALTHY or self.infection_state == InfectionState.IMMUNE
 
     def is_immune(self):
         return self.infection_state == InfectionState.IMMUNE
@@ -80,13 +88,8 @@ class CelaucoAgent(Agent):
     def is_unaware(self):
         return self.infection_knowledge_state == InfectionKnowledgeState.UNAWARE
 
-    def set_aware(self):
-        self.infection_knowledge_state = InfectionKnowledgeState.AWARE
-
-    def set_infected(self):
-        if self.infection_state != InfectionState.HEALTHY:
-            raise InfectionException()
-        self.infection_state = InfectionState.INFECTED
+    def is_aware(self):
+        return self.infection_knowledge_state == InfectionKnowledgeState.AWARE
 
     def set_immune(self):
         if self.infection_state != InfectionState.INFECTED:
@@ -99,6 +102,9 @@ class CelaucoAgent(Agent):
             raise SystemError("A non infected agent cannot die")
         self.infection_state = InfectionState.DEAD
         self.model.kill_agent(agent=self)
+
+    def set_aware(self):
+        self.infection_knowledge_state = InfectionKnowledgeState.AWARE
 
     def additional_step(self):
         """

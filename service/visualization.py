@@ -18,10 +18,10 @@ class Visualization:
                     "Label": "Infected",
                     "Color": "Red"
                 },
-                {
-                    "Label": "Immune",
-                    "Color": "Blue"
-                },
+                # {
+                #     "Label": "Immune",
+                #     "Color": "Blue"
+                # },
                 {
                     "Label": "Dead",
                     "Color": "Black"
