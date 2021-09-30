@@ -69,6 +69,7 @@ class CelaucoModel(Model):
     def kill_agent(self, agent):
         self.schedule.remove(agent)
         self.number_of_dead += 1
+        self.grid.remove_agent(agent)
 
     def get_random_position(self):
         x = self.random.randrange(self.grid.width)

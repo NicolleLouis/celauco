@@ -1,13 +1,16 @@
 from mesa import Agent
 
-from constants.player_state import AgentState
+from constants.player_state import InfectionState, InfectionKnowledgeState
+from service.grid import GridService
+from service.movement import MovementService
 from service.probability import ProbabilityService
 
 
 class CelaucoAgent(Agent):
     def __init__(self, unique_id, model):
         super().__init__(unique_id, model)
-        self.state = AgentState.HEALTHY
+        self.infection_state = InfectionState.HEALTHY
+        self.infection_knowledge_state = InfectionKnowledgeState.UNAWARE
         self.infection_duration = 0
 
     def step(self):
@@ -17,7 +20,10 @@ class CelaucoAgent(Agent):
             self.infection_evolution()
 
     def move(self):
-        new_position = self.random.choice(self.get_neighbour_positions())
+        if self.infection_knowledge_state == InfectionKnowledgeState.AWARE:
+            new_position = MovementService.avoid_agents(agent=self)
+        else:
+            new_position = MovementService.random_move(agent=self)
         self.model.grid.move_agent(self, new_position)
 
     def infection_evolution(self):
@@ -29,7 +35,10 @@ class CelaucoAgent(Agent):
                 self.set_dead()
 
     def infect_neighbours(self):
-        neighbours = self.model.grid.get_cell_list_contents(self.get_neighbour_positions())
+        neighbours = GridService.get_grid_content(
+            grid=self.model.grid,
+            positions=self.get_neighbour_positions()
+        )
         healthy_neighbours = list(
             filter(
                 lambda neighbour: neighbour.is_healthy(),
@@ -41,48 +50,58 @@ class CelaucoAgent(Agent):
                 neighbour.set_infected()
 
     def get_neighbour_positions(self):
-        neighbor_positions = self.model.grid.get_neighborhood(
-            self.pos,
-            moore=True,
-            include_center=True,
+        return GridService.get_neighbour_position(
+            grid=self.model.grid,
+            position=self.pos
         )
-        return neighbor_positions
 
     def set_infected(self):
-        if self.state != AgentState.HEALTHY:
+        if self.infection_state != InfectionState.HEALTHY:
             raise SystemError("Cannot infect this agent")
-        self.state = AgentState.INFECTED
+        self.infection_state = InfectionState.INFECTED
+        self.infection_knowledge_state = InfectionKnowledgeState.AWARE
 
     def is_infected(self):
-        return self.state == AgentState.INFECTED
+        return self.infection_state == InfectionState.INFECTED
 
     def is_healthy(self):
-        return self.state == AgentState.HEALTHY
+        return self.infection_state == InfectionState.HEALTHY
 
     def is_immune(self):
-        return self.state == AgentState.IMMUNE
+        return self.infection_state == InfectionState.IMMUNE
 
     def set_immune(self):
-        if self.state != AgentState.INFECTED:
+        if self.infection_state != InfectionState.INFECTED:
             raise SystemError("A non infected agent cannot become immune")
-        self.state = AgentState.IMMUNE
+        self.infection_state = InfectionState.IMMUNE
+        self.infection_knowledge_state = InfectionKnowledgeState.UNAWARE
 
     def set_dead(self):
-        if self.state != AgentState.INFECTED:
+        if self.infection_state != InfectionState.INFECTED:
             raise SystemError("A non infected agent cannot die")
-        self.state = AgentState.DEAD
+        self.infection_state = InfectionState.DEAD
         self.model.kill_agent(agent=self)
 
     def display(self):
+        """
+        Documentation is in the class: CanvasGrid(VisualizationElement)
+        file: CanvasGridVisualization from mesa.visualization.modules
+        """
         data = {
             "Shape": "circle",
             "Color": "green",
-            "Filled": "true",
+            "Filled": "false",
             "Layer": 0,
             "r": 0.5,
+            "w": 0.5,
+            "h": 0.5,
+            "text_color": "white"
         }
-        if self.state == AgentState.INFECTED:
+        if self.infection_state == InfectionState.INFECTED:
             data["Color"] = "red"
-        if self.state == AgentState.IMMUNE:
+        if self.infection_state == InfectionState.IMMUNE:
             data["Color"] = "blue"
+
+        if self.infection_knowledge_state == InfectionKnowledgeState.AWARE:
+            data["Shape"] = "rect"
         return data
