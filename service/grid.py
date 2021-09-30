@@ -1,5 +1,12 @@
 class GridService:
     @staticmethod
+    def get_agent_neighbour_position(agent):
+        return GridService.get_neighbour_position(
+            grid=agent.model.grid,
+            position=agent.pos
+        )
+
+    @staticmethod
     def get_neighbour_position(grid, position):
         neighbor_positions = grid.get_neighborhood(
             position,

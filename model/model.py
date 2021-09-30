@@ -1,16 +1,21 @@
+import random
+
 from mesa import Model
 from mesa.time import RandomActivation
 from mesa.space import MultiGrid
 from mesa.datacollection import DataCollector
 
-from model.agent import CelaucoAgent
+from exceptions.infection import InfectionException
+from model.agents.base_agent import CelaucoAgent
+from model.agents.medic import Medic
 
 
 class CelaucoModel(Model):
     """A model with some number of agents."""
     def __init__(
             self,
-            agents_number=10,
+            agents_number=20,
+            medic_number=0,
             initially_infected=1,
             width=10,
             height=10,
@@ -19,7 +24,8 @@ class CelaucoModel(Model):
             death_probability=1,
     ):
         super().__init__()
-        self.num_agents = agents_number
+        self.medic_number = medic_number
+        self.base_agent_number = agents_number - medic_number
         self.schedule = RandomActivation(self)
         self.grid = MultiGrid(
             width=width,
@@ -42,8 +48,11 @@ class CelaucoModel(Model):
         )
 
         # Create agents
-        for index in range(self.num_agents):
+        for index in range(self.base_agent_number):
             self.add_agent(agent_id=index)
+        for index in range(self.medic_number):
+            agent_index = index + self.base_agent_number
+            self.add_agent(agent_id=agent_index, agent_class=Medic)
 
         self.infect_agent(number_of_agent_to_infect=initially_infected)
 
@@ -57,10 +66,14 @@ class CelaucoModel(Model):
         if number_of_agent_to_infect > len(agents):
             raise SystemError("Cannot infect that much agents")
         for index in range(number_of_agent_to_infect):
-            agents[index].set_infected()
+            agent = random.choice(agents)
+            try:
+                agent.set_infected()
+            except InfectionException:
+                pass
 
-    def add_agent(self, agent_id):
-        agent = CelaucoAgent(agent_id, self)
+    def add_agent(self, agent_id, agent_class=CelaucoAgent):
+        agent = agent_class(agent_id, self)
         self.schedule.add(agent)
 
         x, y = self.get_random_position()

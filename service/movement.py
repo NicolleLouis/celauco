@@ -4,20 +4,26 @@ from service.grid import GridService
 class MovementService:
     @staticmethod
     def random_move(agent):
-        new_position = agent.random.choice(agent.get_neighbour_positions())
+        new_position = agent.random.choice(
+            GridService.get_agent_neighbour_position(
+                agent=agent
+            )
+        )
         return new_position
 
     @staticmethod
     def avoid_agents(agent):
         best_positions = []
         minimum_agent_neighbours = 9
-        for position in agent.get_neighbour_positions():
+        for position in GridService.get_agent_neighbour_position(
+                agent=agent
+        ):
             number_of_agent_neighbours = len(
                 GridService.get_grid_content(
                     grid=agent.model.grid,
                     positions=GridService.get_neighbour_position(
                         grid=agent.model.grid,
-                        position=agent.pos
+                        position=position
                     )
                 )
             )

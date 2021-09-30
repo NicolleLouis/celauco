@@ -1,12 +1,20 @@
 from mesa import Agent
 
 from constants.player_state import InfectionState, InfectionKnowledgeState
+from exceptions.infection import InfectionException
 from service.grid import GridService
 from service.movement import MovementService
 from service.probability import ProbabilityService
 
 
 class CelaucoAgent(Agent):
+    """
+    Base Agent class, function to override:
+    - move()
+    - additional_step()
+    - display()
+    """
+
     def __init__(self, unique_id, model):
         super().__init__(unique_id, model)
         self.infection_state = InfectionState.HEALTHY
@@ -18,13 +26,18 @@ class CelaucoAgent(Agent):
         if self.is_infected():
             self.infect_neighbours()
             self.infection_evolution()
+        self.additional_step()
 
     def move(self):
+        new_position = self.next_position()
+        self.model.grid.move_agent(self, new_position)
+
+    def next_position(self):
         if self.infection_knowledge_state == InfectionKnowledgeState.AWARE:
             new_position = MovementService.avoid_agents(agent=self)
         else:
             new_position = MovementService.random_move(agent=self)
-        self.model.grid.move_agent(self, new_position)
+        return new_position
 
     def infection_evolution(self):
         self.infection_duration += 1
@@ -35,10 +48,7 @@ class CelaucoAgent(Agent):
                 self.set_dead()
 
     def infect_neighbours(self):
-        neighbours = GridService.get_grid_content(
-            grid=self.model.grid,
-            positions=self.get_neighbour_positions()
-        )
+        neighbours = self.get_neighbors()
         healthy_neighbours = list(
             filter(
                 lambda neighbour: neighbour.is_healthy(),
@@ -49,17 +59,14 @@ class CelaucoAgent(Agent):
             if ProbabilityService.random_probability(self.model.infection_probability):
                 neighbour.set_infected()
 
-    def get_neighbour_positions(self):
-        return GridService.get_neighbour_position(
+    def get_neighbors(self):
+        neighbours = GridService.get_grid_content(
             grid=self.model.grid,
-            position=self.pos
+            positions=GridService.get_agent_neighbour_position(
+                agent=self
+            )
         )
-
-    def set_infected(self):
-        if self.infection_state != InfectionState.HEALTHY:
-            raise SystemError("Cannot infect this agent")
-        self.infection_state = InfectionState.INFECTED
-        self.infection_knowledge_state = InfectionKnowledgeState.AWARE
+        return neighbours
 
     def is_infected(self):
         return self.infection_state == InfectionState.INFECTED
@@ -69,6 +76,17 @@ class CelaucoAgent(Agent):
 
     def is_immune(self):
         return self.infection_state == InfectionState.IMMUNE
+
+    def is_unaware(self):
+        return self.infection_knowledge_state == InfectionKnowledgeState.UNAWARE
+
+    def set_aware(self):
+        self.infection_knowledge_state = InfectionKnowledgeState.AWARE
+
+    def set_infected(self):
+        if self.infection_state != InfectionState.HEALTHY:
+            raise InfectionException()
+        self.infection_state = InfectionState.INFECTED
 
     def set_immune(self):
         if self.infection_state != InfectionState.INFECTED:
@@ -81,6 +99,13 @@ class CelaucoAgent(Agent):
             raise SystemError("A non infected agent cannot die")
         self.infection_state = InfectionState.DEAD
         self.model.kill_agent(agent=self)
+
+    def additional_step(self):
+        """
+        function used to add additional step executed by agent
+        :return:
+        """
+        pass
 
     def display(self):
         """
@@ -101,7 +126,7 @@ class CelaucoAgent(Agent):
             data["Color"] = "red"
         if self.infection_state == InfectionState.IMMUNE:
             data["Color"] = "blue"
-
         if self.infection_knowledge_state == InfectionKnowledgeState.AWARE:
-            data["Shape"] = "rect"
+            data["Color"] = "yellow"
+
         return data
