@@ -36,7 +36,7 @@ class CelaucoAgent(Agent):
         if self.is_infected() and self.is_aware():
             new_position = MovementService.avoid_agents(agent=self)
         else:
-            new_position = MovementService.random_move(agent=self)
+            new_position = MovementService.random_neighbours(agent=self)
         return new_position
 
     def infection_evolution(self):

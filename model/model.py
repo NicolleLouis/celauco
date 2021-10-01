@@ -7,17 +7,20 @@ from mesa.datacollection import DataCollector
 
 from exceptions.infection import InfectionException
 from model.agents.base_agent import CelaucoAgent
+from model.agents.businessman import BusinessMan
 from model.agents.medic import Medic
 from model.agents.gilet_josne import GiletJosne
+from service.grid import GridService
 
 
 class CelaucoModel(Model):
     """A model with some number of agents."""
     def __init__(
             self,
-            agents_number=20,
+            human_number=20,
             medic_number=0,
             gilet_josne_number=0,
+            businessman_number=0,
             initially_infected=1,
             width=10,
             height=10,
@@ -26,13 +29,10 @@ class CelaucoModel(Model):
             death_probability=1,
     ):
         super().__init__()
-        self.base_agent_number = agents_number
-
+        self.human_number = human_number
         self.medic_number = medic_number
-        self.base_agent_number = self.base_agent_number - medic_number
-
         self.gilet_josne_number = gilet_josne_number
-        self.base_agent_number = self.base_agent_number - gilet_josne_number
+        self.businessman_number = businessman_number
 
         self.schedule = RandomActivation(self)
         self.grid = MultiGrid(
@@ -57,7 +57,7 @@ class CelaucoModel(Model):
 
         # Create agents
         current_index = 0
-        for index in range(self.base_agent_number):
+        for index in range(self.human_number):
             self.add_agent(agent_id=current_index)
             current_index += 1
         for index in range(self.medic_number):
@@ -65,6 +65,9 @@ class CelaucoModel(Model):
             current_index += 1
         for index in range(self.gilet_josne_number):
             self.add_agent(agent_id=current_index, agent_class=GiletJosne)
+            current_index += 1
+        for index in range(self.businessman_number):
+            self.add_agent(agent_id=current_index, agent_class=BusinessMan)
             current_index += 1
 
         self.infect_agent(number_of_agent_to_infect=initially_infected)
@@ -89,18 +92,13 @@ class CelaucoModel(Model):
         agent = agent_class(agent_id, self)
         self.schedule.add(agent)
 
-        x, y = self.get_random_position()
+        x, y = GridService.get_random_position(self.grid)
         self.grid.place_agent(agent, (x, y))
 
     def kill_agent(self, agent):
         self.schedule.remove(agent)
         self.grid.remove_agent(agent)
         self.number_of_dead += 1
-
-    def get_random_position(self):
-        x = self.random.randrange(self.grid.width)
-        y = self.random.randrange(self.grid.height)
-        return x, y
 
     def should_continue(self):
         agents = self.schedule.agents

@@ -10,7 +10,9 @@ class GiletJosne(CelaucoAgent):
     def display(self):
         data = super().display()
         data["scale"] = 0.9
-        data["Shape"] = "images/gilet_josne"
+        data["Layer"] = 0.5
+        if self.is_healthy():
+            data["Shape"] = "images/gilet_josne"
         if self.is_infected():
             data["Shape"] = "images/gilet_josne_infected"
         return data

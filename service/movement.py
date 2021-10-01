@@ -3,7 +3,7 @@ from service.grid import GridService
 
 class MovementService:
     @staticmethod
-    def random_move(agent):
+    def random_neighbours(agent):
         new_position = agent.random.choice(
             GridService.get_agent_neighbour_position(
                 agent=agent
@@ -56,3 +56,8 @@ class MovementService:
                 maximum_agent_neighbours = number_of_agent_neighbours
                 best_positions = [position]
         return agent.random.choice(best_positions)
+
+    @staticmethod
+    def random_position(agent):
+        new_position = GridService.get_random_position(agent.model.grid)
+        return new_position

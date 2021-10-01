@@ -36,27 +36,34 @@ class Visualization:
         return agent.display()
 
     @staticmethod
-    def get_sliders():
-        agents_number = UserSettableParameter(
+    def get_sliders(size):
+        human_number = UserSettableParameter(
             param_type="slider",
-            name="Agent Numbers",
-            value=25,
-            min_value=1,
-            max_value=50,
+            name="Human number",
+            value=size*4,
+            min_value=0,
+            max_value=size*10,
+        )
+        businessman_number = UserSettableParameter(
+            param_type="slider",
+            name="BusinessMan number",
+            value=0,
+            min_value=0,
+            max_value=size * 10,
         )
         medic_number = UserSettableParameter(
             param_type="slider",
             name="Medic number",
             value=0,
             min_value=0,
-            max_value=5,
+            max_value=int(size/5),
         )
         gilet_josne_number = UserSettableParameter(
             param_type="slider",
             name="Gilet Josne number",
             value=0,
             min_value=0,
-            max_value=25,
+            max_value=size,
         )
         initially_infected = UserSettableParameter(
             param_type="slider",
@@ -87,33 +94,41 @@ class Visualization:
             max_value=100,
         )
         sliders = {
-            "agents_number": agents_number,
+            "human_number": human_number,
             # "initially_infected": initially_infected,
             "infection_probability": infection_probability,
             "infection_duration": infection_duration,
             "death_probability": death_probability,
             "medic_number": medic_number,
             "gilet_josne_number": gilet_josne_number,
+            "businessman_number": businessman_number,
         }
         return sliders
 
     @classmethod
-    def display_model(cls):
-        grid = CanvasGrid(cls.agent_portrayal, 10, 10, 500, 500)
-        sliders = cls.get_sliders()
+    def display_model(cls, size=10):
+        grid = CanvasGrid(
+            portrayal_method=cls.agent_portrayal,
+            grid_width=size,
+            grid_height=size,
+            canvas_width=500,
+            canvas_height=500,
+        )
+        sliders = cls.get_sliders(size=size)
         server = ModularServer(
             model_cls=CelaucoModel,
             visualization_elements=[grid, cls.get_charts()],
             model_params={
-                "agents_number": sliders["agents_number"],
+                "human_number": sliders["human_number"],
                 "infection_probability": sliders["infection_probability"],
                 "infection_duration": sliders["infection_duration"],
                 "death_probability": sliders["death_probability"],
                 "medic_number": sliders["medic_number"],
                 "gilet_josne_number": sliders["gilet_josne_number"],
+                "businessman_number": sliders["businessman_number"],
                 # "initially_infected": sliders["initially_infected"],
-                "width": 10,
-                "height": 10,
+                "width": size,
+                "height": size,
             }
         )
         server.port = 8521
