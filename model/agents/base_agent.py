@@ -17,6 +17,7 @@ class CelaucoAgent(Agent):
 
     def __init__(self, unique_id, model):
         super().__init__(unique_id, model)
+        self.infection = None
         self.infection_state = InfectionState.HEALTHY
         self.infection_knowledge_state = InfectionKnowledgeState.UNAWARE
         self.infection_duration = 0
@@ -41,10 +42,10 @@ class CelaucoAgent(Agent):
 
     def infection_evolution(self):
         self.infection_duration += 1
-        if self.infection_duration >= self.model.infection_duration:
+        if self.infection_duration >= self.infection.infection_duration:
             self.set_immune()
         else:
-            if ProbabilityService.random_probability(self.model.death_probability):
+            if ProbabilityService.random_probability_1000(self.infection.death_probability):
                 self.set_dead()
 
     def infect_neighbours(self):
@@ -56,8 +57,8 @@ class CelaucoAgent(Agent):
             )
         )
         for neighbour in can_be_infected_neighbours:
-            if ProbabilityService.random_probability(self.model.infection_probability):
-                neighbour.set_infected()
+            if ProbabilityService.random_percentage(self.infection.infection_probability):
+                neighbour.set_infected(self.infection)
 
     def get_neighbors(self):
         neighbours = GridService.get_grid_content(
@@ -71,10 +72,11 @@ class CelaucoAgent(Agent):
     def can_be_infected(self):
         return self.infection_state == InfectionState.HEALTHY
 
-    def set_infected(self):
+    def set_infected(self, infection):
         if not self.can_be_infected():
             raise InfectionException()
         self.infection_state = InfectionState.INFECTED
+        self.infection = infection
 
     def is_infected(self):
         return self.infection_state == InfectionState.INFECTED

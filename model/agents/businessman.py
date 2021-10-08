@@ -11,7 +11,7 @@ class BusinessMan(CelaucoAgent):
         self.is_flying = False
 
     def next_position(self):
-        if ProbabilityService.random_probability(self.flight_probability):
+        if ProbabilityService.random_percentage(self.flight_probability):
             self.set_flying()
             return MovementService.random_position(agent=self)
         self.set_walking()

@@ -10,6 +10,7 @@ from model.agents.base_agent import CelaucoAgent
 from model.agents.businessman import BusinessMan
 from model.agents.medic import Medic
 from model.agents.gilet_josne import GiletJosne
+from model.infection import Infection
 from service.grid import GridService
 
 
@@ -26,7 +27,7 @@ class CelaucoModel(Model):
             height=10,
             infection_probability=25,
             infection_duration=10,
-            death_probability=1,
+            death_probability=5,
     ):
         super().__init__()
         self.human_number = human_number
@@ -41,17 +42,24 @@ class CelaucoModel(Model):
             torus=False
         )
         self.running = True
-        self.infection_probability = infection_probability
-        self.infection_duration = infection_duration
-        self.death_probability = death_probability
+        self.infection = Infection(
+            infection_probability=infection_probability,
+            infection_duration=infection_duration,
+            death_probability=death_probability,
+        )
         self.number_of_dead = 0
 
-        self.data_collector = DataCollector(
+        self.graph_collector = DataCollector(
             model_reporters={
                 "Healthy": self.number_healthy,
                 "Infected": self.number_infected,
                 "Immune": self.number_immune,
-                "Dead": self.get_number_of_dead,
+                "Dead": self.number_dead,
+            },
+        )
+        self.variant_collector = DataCollector(
+            model_reporters={
+                "Variant": self.compute_compex_data,
             },
         )
 
@@ -73,7 +81,8 @@ class CelaucoModel(Model):
         self.infect_agent(number_of_agent_to_infect=initially_infected)
 
     def step(self):
-        self.data_collector.collect(self)
+        self.graph_collector.collect(self)
+        self.variant_collector.collect(self)
         self.schedule.step()
         self.should_continue()
 
@@ -84,11 +93,11 @@ class CelaucoModel(Model):
         for index in range(number_of_agent_to_infect):
             agent = random.choice(agents)
             try:
-                agent.set_infected()
+                agent.set_infected(self.infection)
             except InfectionException:
                 pass
 
-    def add_agent(self, agent_id: object, agent_class: object = CelaucoAgent) -> object:
+    def add_agent(self, agent_id, agent_class=CelaucoAgent):
         agent = agent_class(agent_id, self)
         self.schedule.add(agent)
 
@@ -140,5 +149,14 @@ class CelaucoModel(Model):
         )
         return len(immune_agents)
 
-    def get_number_of_dead(self):
+    def number_dead(self):
         return self.number_of_dead
+
+    def compute_compex_data(self):
+        # ToDo: compute real variant data #
+        return [
+            {
+                'variant_name': "test",
+                'infected_number': 12
+            }
+        ]

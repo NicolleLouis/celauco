@@ -18,16 +18,12 @@ class Visualization:
                     "Label": "Infected",
                     "Color": "Red"
                 },
-                # {
-                #     "Label": "Immune",
-                #     "Color": "Blue"
-                # },
                 {
                     "Label": "Dead",
                     "Color": "Black"
                 },
             ],
-            data_collector_name='data_collector'
+            data_collector_name='graph_collector'
         )
         return charts
 
@@ -65,13 +61,6 @@ class Visualization:
             min_value=0,
             max_value=size,
         )
-        initially_infected = UserSettableParameter(
-            param_type="slider",
-            name="Agent initially infected",
-            value=1,
-            min_value=1,
-            max_value=50,
-        )
         infection_probability = UserSettableParameter(
             param_type="slider",
             name="Infection probability",
@@ -88,14 +77,13 @@ class Visualization:
         )
         death_probability = UserSettableParameter(
             param_type="slider",
-            name="Death probabity",
-            value=1,
+            name="Death probabity (*0.1)",
+            value=5,
             min_value=0,
             max_value=100,
         )
         sliders = {
             "human_number": human_number,
-            # "initially_infected": initially_infected,
             "infection_probability": infection_probability,
             "infection_duration": infection_duration,
             "death_probability": death_probability,
