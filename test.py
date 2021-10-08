@@ -1,7 +1,14 @@
 from model.model import CelaucoModel
-from service.infection_service import InfectionService
-from service.visualization import Visualization
 
-model = CelaucoModel(human_number=10)
+model = CelaucoModel(
+    human_number=100,
+    width=25,
+    height=25,
+    infection_probability=25,
+    infection_duration=50,
+    death_probability=5,
+    mutation_probability=5,
+)
 model.run_model()
-print(model.variant_collector.get_model_vars_dataframe().to_dict()["Variant"])
+print(model.graph_collector.get_model_vars_dataframe())
+print(model.variant_collector.get_model_vars_dataframe().to_dict()["variant_data"])

@@ -16,6 +16,7 @@ from service.grid import GridService
 
 class CelaucoModel(Model):
     """A model with some number of agents."""
+
     def __init__(
             self,
             human_number=20,
@@ -28,6 +29,7 @@ class CelaucoModel(Model):
             infection_probability=25,
             infection_duration=10,
             death_probability=5,
+            mutation_probability=5,
     ):
         super().__init__()
         self.human_number = human_number
@@ -46,6 +48,7 @@ class CelaucoModel(Model):
             infection_probability=infection_probability,
             infection_duration=infection_duration,
             death_probability=death_probability,
+            mutation_probability=mutation_probability,
         )
         self.number_of_dead = 0
 
@@ -59,7 +62,7 @@ class CelaucoModel(Model):
         )
         self.variant_collector = DataCollector(
             model_reporters={
-                "Variant": self.compute_compex_data,
+                "variant_data": self.compute_variant_data,
             },
         )
 
@@ -152,11 +155,17 @@ class CelaucoModel(Model):
     def number_dead(self):
         return self.number_of_dead
 
-    def compute_compex_data(self):
-        # ToDo: compute real variant data #
-        return [
-            {
-                'variant_name': "test",
-                'infected_number': 12
-            }
-        ]
+    def compute_variant_data(self):
+        agents = self.schedule.agents
+        variant_data = {}
+        infected_agents = filter(
+            lambda agent: agent.is_infected(),
+            agents
+        )
+        for agent in infected_agents:
+            infection_name = agent.infection.name
+            if infection_name in variant_data:
+                variant_data[infection_name] += 1
+            else:
+                variant_data[infection_name] = 1
+        return variant_data

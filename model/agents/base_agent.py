@@ -3,6 +3,7 @@ from mesa import Agent
 from constants.player_state import InfectionState, InfectionKnowledgeState
 from exceptions.infection import InfectionException
 from service.grid import GridService
+from service.infection_service import InfectionService
 from service.movement import MovementService
 from service.probability import ProbabilityService
 
@@ -41,6 +42,9 @@ class CelaucoAgent(Agent):
         return new_position
 
     def infection_evolution(self):
+        if ProbabilityService.random_probability_1000(self.infection.mutation_probability):
+            new_infection = InfectionService.generate_random_infection()
+            self.infection = new_infection
         self.infection_duration += 1
         if self.infection_duration >= self.infection.infection_duration:
             self.set_immune()
