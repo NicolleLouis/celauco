@@ -8,10 +8,11 @@ animals = [
 ]
 
 adjectives = [
-    "gentil",
-    "menaçant",
     "affamé",
+    "dodu",
+    "gentil",
+    "joueur",
+    "menaçant",
     "paresseux",
     "taiseux",
-    "joueur",
 ]

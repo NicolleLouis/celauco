@@ -14,6 +14,8 @@ class CelaucoAgent(Agent):
     - move()
     - additional_step()
     - display()
+
+    ToDo: change immunity to only trigger on accurate variant
     """
 
     def __init__(self, unique_id, model):
@@ -22,12 +24,14 @@ class CelaucoAgent(Agent):
         self.infection_state = InfectionState.HEALTHY
         self.infection_knowledge_state = InfectionKnowledgeState.UNAWARE
         self.infection_duration = 0
+        self.immunity = []
 
     def step(self):
         self.move()
         self.additional_step()
         if self.is_infected():
             self.infect_neighbours()
+            self.infection_mutation()
             self.infection_evolution()
 
     def move(self):
@@ -41,13 +45,19 @@ class CelaucoAgent(Agent):
             new_position = MovementService.random_neighbours(agent=self)
         return new_position
 
-    def infection_evolution(self):
+    def infection_mutation(self):
         if ProbabilityService.random_probability_1000(self.infection.mutation_probability):
-            new_infection = InfectionService.generate_random_infection()
+            new_infection = InfectionService.generate_infection(self.infection)
             self.infection = new_infection
+            self.model.add_known_infection(new_infection)
+
+    def infection_evolution(self):
         self.infection_duration += 1
+        self.infection.infection_score += 1
+        # Immunity
         if self.infection_duration >= self.infection.infection_duration:
-            self.set_immune()
+            self.set_immune(self.infection)
+        # Death
         else:
             if ProbabilityService.random_probability_1000(self.infection.death_probability):
                 self.set_dead()
@@ -86,10 +96,18 @@ class CelaucoAgent(Agent):
         return self.infection_state == InfectionState.INFECTED
 
     def is_healthy(self):
-        return self.infection_state == InfectionState.HEALTHY or self.infection_state == InfectionState.IMMUNE
+        return self.infection_state == InfectionState.HEALTHY
 
-    def is_immune(self):
-        return self.infection_state == InfectionState.IMMUNE
+    def is_immune(self, infection):
+        if infection.infection_id in self.immunity:
+            print("ici")
+            print("ici")
+            print("ici")
+            print("ici")
+            print("ici")
+            print("ici")
+            print("ici")
+        return infection.infection_id in self.immunity
 
     def is_unaware(self):
         return self.infection_knowledge_state == InfectionKnowledgeState.UNAWARE
@@ -97,11 +115,13 @@ class CelaucoAgent(Agent):
     def is_aware(self):
         return self.infection_knowledge_state == InfectionKnowledgeState.AWARE
 
-    def set_immune(self):
+    def set_immune(self, infection):
         if self.infection_state != InfectionState.INFECTED:
             raise SystemError("A non infected agent cannot become immune")
-        self.infection_state = InfectionState.IMMUNE
+        self.infection_state = InfectionState.HEALTHY
         self.infection_knowledge_state = InfectionKnowledgeState.UNAWARE
+        if infection.infection_id not in self.immunity:
+            self.immunity.append(infection.infection_id)
 
     def set_dead(self):
         if self.infection_state != InfectionState.INFECTED:
@@ -136,8 +156,6 @@ class CelaucoAgent(Agent):
         }
         if self.is_infected():
             data["Color"] = "red"
-        if self.is_immune():
-            data["Color"] = "blue"
         if self.is_aware():
             data["Color"] = "yellow"
 

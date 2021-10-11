@@ -1,4 +1,5 @@
 venv/
+graph/
 
 .idea/
 __pycache__/

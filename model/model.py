@@ -51,12 +51,12 @@ class CelaucoModel(Model):
             mutation_probability=mutation_probability,
         )
         self.number_of_dead = 0
+        self.known_infection = [self.infection]
 
         self.graph_collector = DataCollector(
             model_reporters={
                 "Healthy": self.number_healthy,
                 "Infected": self.number_infected,
-                "Immune": self.number_immune,
                 "Dead": self.number_dead,
             },
         )
@@ -88,6 +88,13 @@ class CelaucoModel(Model):
         self.variant_collector.collect(self)
         self.schedule.step()
         self.should_continue()
+        if not self.running:
+            self.end_step()
+
+    def end_step(self):
+        print('######')
+        print("number of dead: {}".format(self.number_of_dead))
+        self.display_biggest_infection()
 
     def infect_agent(self, number_of_agent_to_infect):
         agents = self.schedule.agents
@@ -111,6 +118,31 @@ class CelaucoModel(Model):
         self.schedule.remove(agent)
         self.grid.remove_agent(agent)
         self.number_of_dead += 1
+
+    def add_known_infection(self, infection):
+        self.known_infection.append(infection)
+
+    def get_biggest_infection(self):
+        sorted_infections = sorted(
+            self.known_infection,
+            key=lambda infection: infection.infection_score,
+            reverse=True,
+        )
+        return sorted_infections[:5]
+
+    def display_biggest_infection(self):
+        biggest_infection = self.get_biggest_infection()
+        for infection in biggest_infection:
+            infection.display()
+
+    def get_biggest_infections_name(self):
+        biggest_infection_name = list(
+            map(
+                lambda infection: infection.name,
+                self.get_biggest_infection()
+            )
+        )
+        return biggest_infection_name
 
     def should_continue(self):
         agents = self.schedule.agents
@@ -141,16 +173,6 @@ class CelaucoModel(Model):
             )
         )
         return len(infected_agents)
-
-    def number_immune(self):
-        agents = self.schedule.agents
-        immune_agents = list(
-            filter(
-                lambda agent: agent.is_immune(),
-                agents
-            )
-        )
-        return len(immune_agents)
 
     def number_dead(self):
         return self.number_of_dead

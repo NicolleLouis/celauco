@@ -18,10 +18,7 @@ class Infection:
         self.infection_duration = infection_duration
         self.death_probability = death_probability
         self.mutation_probability = mutation_probability
-        self.co_immunity = []
-
-    def add_co_immunity(self, other_infection):
-        self.co_immunity.append(other_infection.infection_id)
+        self.infection_score = 0
 
     @staticmethod
     def generate_infection_name():
@@ -31,3 +28,12 @@ class Infection:
             animal=animal,
             adjective=adjective
         )
+
+    def display(self):
+        print("#####")
+        print("Infection name: {}".format(self.name))
+        print("Infection probability: {}".format(self.infection_probability))
+        print("Infection duration: {}".format(self.infection_duration))
+        print("Death probability: {}".format(self.death_probability))
+        print("Mutation probability: {}".format(self.mutation_probability))
+        print("Score: {}".format(self.infection_score))
