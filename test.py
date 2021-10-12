@@ -1,5 +1,6 @@
 from model.model import CelaucoModel
-from service.graph.variant_evolution import ModelGraphService
+from service.graph_service.variant_death import VariantDeathGraphService
+from service.graph_service.variant_evolution import VariantEvolutionGraphService
 
 model = CelaucoModel(
     human_number=200,
@@ -10,4 +11,6 @@ model = CelaucoModel(
     death_probability=1,
     mutation_probability=10,
 )
-data = ModelGraphService.get_variant_data(model)
+model.run_model()
+VariantEvolutionGraphService.plot(model)
+VariantDeathGraphService.plot(model)

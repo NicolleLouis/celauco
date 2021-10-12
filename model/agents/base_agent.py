@@ -66,7 +66,7 @@ class CelaucoAgent(Agent):
         neighbours = self.get_neighbors()
         can_be_infected_neighbours = list(
             filter(
-                lambda neighbour: neighbour.can_be_infected(),
+                lambda neighbour: neighbour.can_be_infected(self.infection),
                 neighbours
             )
         )
@@ -83,11 +83,11 @@ class CelaucoAgent(Agent):
         )
         return neighbours
 
-    def can_be_infected(self):
-        return self.infection_state == InfectionState.HEALTHY
+    def can_be_infected(self, infection):
+        return self.infection_state == InfectionState.HEALTHY and not self.is_immune(infection)
 
     def set_infected(self, infection):
-        if not self.can_be_infected():
+        if not self.can_be_infected(infection):
             raise InfectionException()
         self.infection_state = InfectionState.INFECTED
         self.infection = infection
@@ -99,14 +99,6 @@ class CelaucoAgent(Agent):
         return self.infection_state == InfectionState.HEALTHY
 
     def is_immune(self, infection):
-        if infection.infection_id in self.immunity:
-            print("ici")
-            print("ici")
-            print("ici")
-            print("ici")
-            print("ici")
-            print("ici")
-            print("ici")
         return infection.infection_id in self.immunity
 
     def is_unaware(self):
@@ -127,6 +119,9 @@ class CelaucoAgent(Agent):
         if self.infection_state != InfectionState.INFECTED:
             raise SystemError("A non infected agent cannot die")
         self.infection_state = InfectionState.DEAD
+        self.infection.infection_score += 10
+        self.infection.victim_number += 1
+
         self.model.kill_agent(agent=self)
 
     def set_aware(self):

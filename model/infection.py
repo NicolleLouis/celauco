@@ -19,6 +19,7 @@ class Infection:
         self.death_probability = death_probability
         self.mutation_probability = mutation_probability
         self.infection_score = 0
+        self.victim_number = 0
 
     @staticmethod
     def generate_infection_name():
@@ -37,3 +38,4 @@ class Infection:
         print("Death probability: {}".format(self.death_probability))
         print("Mutation probability: {}".format(self.mutation_probability))
         print("Score: {}".format(self.infection_score))
+        print("Victim number: {}".format(self.victim_number))

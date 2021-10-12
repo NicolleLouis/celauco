@@ -51,7 +51,7 @@ class CelaucoModel(Model):
             mutation_probability=mutation_probability,
         )
         self.number_of_dead = 0
-        self.known_infection = [self.infection]
+        self.known_infections = [self.infection]
 
         self.graph_collector = DataCollector(
             model_reporters={
@@ -94,7 +94,7 @@ class CelaucoModel(Model):
     def end_step(self):
         print('######')
         print("number of dead: {}".format(self.number_of_dead))
-        self.display_biggest_infection()
+        self.display_biggest_infections()
 
     def infect_agent(self, number_of_agent_to_infect):
         agents = self.schedule.agents
@@ -120,18 +120,18 @@ class CelaucoModel(Model):
         self.number_of_dead += 1
 
     def add_known_infection(self, infection):
-        self.known_infection.append(infection)
+        self.known_infections.append(infection)
 
-    def get_biggest_infection(self):
+    def get_biggest_infections(self):
         sorted_infections = sorted(
-            self.known_infection,
+            self.known_infections,
             key=lambda infection: infection.infection_score,
             reverse=True,
         )
         return sorted_infections[:5]
 
-    def display_biggest_infection(self):
-        biggest_infection = self.get_biggest_infection()
+    def display_biggest_infections(self):
+        biggest_infection = self.get_biggest_infections()
         for infection in biggest_infection:
             infection.display()
 
@@ -139,7 +139,7 @@ class CelaucoModel(Model):
         biggest_infection_name = list(
             map(
                 lambda infection: infection.name,
-                self.get_biggest_infection()
+                self.get_biggest_infections()
             )
         )
         return biggest_infection_name
