@@ -30,13 +30,9 @@ class CelaucoModel(Model):
             infection_duration=10,
             death_probability=5,
             mutation_probability=5,
+            verbose=False,
     ):
         super().__init__()
-        self.human_number = human_number
-        self.medic_number = medic_number
-        self.gilet_josne_number = gilet_josne_number
-        self.businessman_number = businessman_number
-
         self.schedule = RandomActivation(self)
         self.grid = MultiGrid(
             width=width,
@@ -66,22 +62,15 @@ class CelaucoModel(Model):
             },
         )
 
-        # Create agents
-        current_index = 0
-        for index in range(self.human_number):
-            self.add_agent(agent_id=current_index)
-            current_index += 1
-        for index in range(self.medic_number):
-            self.add_agent(agent_id=current_index, agent_class=Medic)
-            current_index += 1
-        for index in range(self.gilet_josne_number):
-            self.add_agent(agent_id=current_index, agent_class=GiletJosne)
-            current_index += 1
-        for index in range(self.businessman_number):
-            self.add_agent(agent_id=current_index, agent_class=BusinessMan)
-            current_index += 1
+        self.verbose = verbose
 
-        self.infect_agent(number_of_agent_to_infect=initially_infected)
+        self.initialise_agents(
+            initially_infected=initially_infected,
+            human_number=human_number,
+            medic_number=medic_number,
+            gilet_josne_number=gilet_josne_number,
+            businessman_number=businessman_number,
+        )
 
     def step(self):
         self.graph_collector.collect(self)
@@ -92,9 +81,10 @@ class CelaucoModel(Model):
             self.end_step()
 
     def end_step(self):
-        print('######')
-        print("number of dead: {}".format(self.number_of_dead))
-        self.display_biggest_infections()
+        if self.verbose:
+            print('######')
+            print("number of dead: {}".format(self.number_of_dead))
+            self.display_biggest_infections()
 
     def infect_agent(self, number_of_agent_to_infect):
         agents = self.schedule.agents
@@ -191,3 +181,28 @@ class CelaucoModel(Model):
             else:
                 variant_data[infection_name] = 1
         return variant_data
+
+    def initialise_agents(
+            self,
+            human_number,
+            initially_infected,
+            medic_number,
+            gilet_josne_number,
+            businessman_number,
+    ):
+        # Create agents
+        current_index = 0
+        for index in range(human_number):
+            self.add_agent(agent_id=current_index)
+            current_index += 1
+        for index in range(medic_number):
+            self.add_agent(agent_id=current_index, agent_class=Medic)
+            current_index += 1
+        for index in range(gilet_josne_number):
+            self.add_agent(agent_id=current_index, agent_class=GiletJosne)
+            current_index += 1
+        for index in range(businessman_number):
+            self.add_agent(agent_id=current_index, agent_class=BusinessMan)
+            current_index += 1
+
+        self.infect_agent(number_of_agent_to_infect=initially_infected)

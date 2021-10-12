@@ -1,23 +1,24 @@
 from model.model import CelaucoModel
-from service.graph_service.infection_evolution import InfectionEvolutionGraphService
-from service.graph_service.variant_death import VariantDeathGraphService
-from service.graph_service.variant_evolution import VariantEvolutionGraphService
+from service.graph_service.single_run.infection_evolution import InfectionEvolutionSingleGraphService
+from service.graph_service.single_run.variant_death import VariantDeathGraphService
+from service.graph_service.single_run.variant_evolution import VariantEvolutionGraphService
 
 model = CelaucoModel(
-    human_number=200,
-    width=25,
-    height=25,
+    human_number=1000,
+    width=50,
+    height=50,
     infection_probability=10,
     infection_duration=50,
     death_probability=1,
     mutation_probability=10,
+    verbose=True,
 )
 model.run_model()
 
 graph_services = [
     VariantEvolutionGraphService,
     VariantDeathGraphService,
-    InfectionEvolutionGraphService,
+    InfectionEvolutionSingleGraphService,
 ]
 for service in graph_services:
     service.plot(model)

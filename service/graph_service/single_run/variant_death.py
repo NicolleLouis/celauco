@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 
 class VariantDeathGraphService:
     number_of_distinctive_variant = 5
-    filename = "variant_death"
+    filename = "single/variant_death"
 
     @classmethod
     def plot(cls, model):

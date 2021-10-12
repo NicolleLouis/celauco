@@ -13,7 +13,7 @@ class MovementService:
 
     @staticmethod
     def avoid_agents(agent):
-        best_positions = []
+        best_positions = [agent.pos]
         minimum_agent_neighbours = 9
         for position in GridService.get_agent_neighbour_position(
                 agent=agent

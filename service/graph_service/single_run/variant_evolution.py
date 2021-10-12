@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 
 
 class VariantEvolutionGraphService:
-    filename = "variant_evolution.png"
+    filename = "single/variant_evolution.png"
 
     @classmethod
     def plot(cls, model):

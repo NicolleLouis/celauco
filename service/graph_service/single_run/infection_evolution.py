@@ -2,8 +2,8 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 
 
-class InfectionEvolutionGraphService:
-    filename = "infection_evolution"
+class InfectionEvolutionSingleGraphService:
+    filename = "single/infection_evolution"
 
     @classmethod
     def plot(cls, model):
@@ -33,11 +33,14 @@ class InfectionEvolutionGraphService:
             "Infected": "tab:red",
             "Dead": "tab:grey"
         }
-        sns.lineplot(
+        ax = sns.lineplot(
             x="Turn Number",
             y="value",
             hue="variable",
             palette=palette,
             data=data,
+        )
+        ax.set(
+            ylabel="Human Number"
         )
         plt.savefig('graph/{}'.format(cls.filename))
