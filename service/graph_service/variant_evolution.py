@@ -4,6 +4,8 @@ import matplotlib.pyplot as plt
 
 
 class VariantEvolutionGraphService:
+    filename = "variant_evolution.png"
+
     @classmethod
     def plot(cls, model):
         raw_data = cls.get_raw_variant_data(model)
@@ -31,7 +33,10 @@ class VariantEvolutionGraphService:
         return df
 
     @classmethod
-    def export_graph_in_file(cls, data, filename="variant_evolution.png"):
+    def export_graph_in_file(
+            cls,
+            data,
+    ):
         plt.figure()
         sns.lineplot(
             y='Number of infected',
@@ -39,8 +44,4 @@ class VariantEvolutionGraphService:
             hue="Variant",
             data=data,
         )
-        plt.savefig('graph/{}'.format(filename))
-
-    @staticmethod
-    def get_length_of_infection(raw_data):
-        return len(raw_data)
+        plt.savefig('graph/{}'.format(cls.filename))

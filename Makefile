@@ -1,5 +1,8 @@
-test:
-	python test.py
+plot:
+	python script_plot.py
 
 visualize:
-	python visualize.py
+	python script_visualize.py
+
+make test:
+	python script_test.py

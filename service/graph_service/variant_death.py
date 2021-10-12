@@ -3,6 +3,7 @@ import matplotlib.pyplot as plt
 
 class VariantDeathGraphService:
     number_of_distinctive_variant = 5
+    filename = "variant_death"
 
     @classmethod
     def plot(cls, model):
@@ -41,12 +42,12 @@ class VariantDeathGraphService:
 
         return data, labels
 
-    @staticmethod
+    @classmethod
     def export_graph_in_file(
+            cls,
             data,
             labels,
-            filename="variant_death"
     ):
         plt.figure()
         plt.pie(data, labels=labels, autopct='%.0f%%')
-        plt.savefig('graph/{}'.format(filename))
+        plt.savefig('graph/{}'.format(cls.filename))
