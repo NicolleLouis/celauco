@@ -4,8 +4,8 @@ from model.non_human_agents.base_non_human import BaseNonHuman
 class Macron(BaseNonHuman):
     def __init__(self, *args):
         super().__init__(*args)
-        self.starting_lockdown_minimal_ratio = 0.2
-        self.stopping_lockdown_minimal_ratio = 0.1
+        self.starting_lockdown_minimal_ratio = 0.25
+        self.stopping_lockdown_minimal_ratio = 0.05
         self.is_global_lockdown = False
 
     def step(self):

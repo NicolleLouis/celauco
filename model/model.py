@@ -31,13 +31,15 @@ class CelaucoModel(Model):
     ):
         """
         :param kwargs:
-        Human Parameters such as:
+        Human Parameters:
             - medic_number: int
             - gilet_josne_number: int
             - businessman_number: int
-        Non Human Parameters such as:
+        Non Human Parameters:
             - macron: bool
             - market_number: int
+        Log paramaters:
+            - log_variant_info: default = True
         """
         super().__init__()
 
@@ -67,11 +69,18 @@ class CelaucoModel(Model):
                 "Dead": self.number_dead,
             },
         )
-        self.variant_collector = DataCollector(
-            model_reporters={
-                "variant_data": self.compute_variant_data,
-            },
-        )
+
+        if "log_variant_info" in kwargs:
+            self.log_variant_info = kwargs["log_variant_info"]
+        else:
+            self.log_variant_info = True
+
+        if self.log_variant_info:
+            self.variant_collector = DataCollector(
+                model_reporters={
+                    "variant_data": self.compute_variant_data,
+                },
+            )
 
         self.verbose = verbose
 
@@ -83,7 +92,8 @@ class CelaucoModel(Model):
 
     def step(self):
         self.graph_collector.collect(self)
-        self.variant_collector.collect(self)
+        if self.log_variant_info:
+            self.variant_collector.collect(self)
         self.schedule.step()
         self.turn_number += 1
         self.should_continue()

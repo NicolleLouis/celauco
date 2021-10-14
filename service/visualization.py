@@ -48,30 +48,30 @@ class Visualization:
         human_number = UserSettableParameter(
             param_type="slider",
             name="Human number",
-            value=size*4,
+            value=int(size*size/5),
             min_value=0,
-            max_value=size*10,
+            max_value=size*size,
         )
         businessman_number = UserSettableParameter(
             param_type="slider",
             name="BusinessMan number",
             value=0,
             min_value=0,
-            max_value=size * 10,
+            max_value=size*size,
         )
         medic_number = UserSettableParameter(
             param_type="slider",
             name="Medic number",
             value=0,
             min_value=0,
-            max_value=int(size/5),
+            max_value=size,
         )
         gilet_josne_number = UserSettableParameter(
             param_type="slider",
             name="Party Monsters number",
             value=0,
             min_value=0,
-            max_value=size,
+            max_value=size*size,
         )
         infection_probability = UserSettableParameter(
             param_type="slider",
@@ -106,7 +106,7 @@ class Visualization:
             name="Market Number",
             value=0,
             min_value=0,
-            max_value=10,
+            max_value=size,
         )
         sliders = {
             "human_number": human_number,
@@ -148,6 +148,7 @@ class Visualization:
                 "width": size,
                 "height": size,
                 "macron": options["macron"],
+                "maximum_number_of_turn": 10000,
             }
         )
         server.port = 8521
