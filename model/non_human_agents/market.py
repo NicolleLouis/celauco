@@ -7,12 +7,17 @@ from service.probability import ProbabilityService
 class Market(BaseNonHuman):
     def __init__(self, *args):
         super().__init__(*args)
+        self.grid = self.model.grid
+
         self.detection_range = 5
         self.attraction_probability = 10
 
-        self.grid = self.model.grid
+        self.is_open = True
 
     def step(self):
+        if not self.is_open:
+            return
+
         humans = self.get_human_inside_detection_range()
         for human in humans:
             if ProbabilityService.random_percentage(self.attraction_probability):
@@ -42,6 +47,12 @@ class Market(BaseNonHuman):
                 target_agent=self
             )
         )
+
+    def set_closed(self):
+        self.is_open = False
+
+    def set_open(self):
+        self.is_open = True
 
     def is_in_grid(self):
         return True

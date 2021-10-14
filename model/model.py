@@ -192,14 +192,17 @@ class CelaucoModel(Model):
         return self.number_of_dead
 
     def get_all_humans(self):
+        return self.get_all_agent_of_class(BaseHuman)
+
+    def get_all_agent_of_class(self, agent_class):
         agents = self.schedule.agents
-        humans = list(
+        filtered_agents = list(
             filter(
-                lambda agent: isinstance(agent, BaseHuman),
+                lambda agent: isinstance(agent, agent_class),
                 agents
             )
         )
-        return humans
+        return filtered_agents
 
     def compute_variant_data(self):
         humans = self.get_all_humans()

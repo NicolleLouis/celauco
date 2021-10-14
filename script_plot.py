@@ -4,15 +4,16 @@ from service.graph_service.single_run.variant_death import VariantDeathGraphServ
 from service.graph_service.single_run.variant_evolution import VariantEvolutionGraphService
 
 model = CelaucoModel(
-    human_number=1000,
-    width=50,
-    height=50,
+    human_number=3000,
+    width=100,
+    height=100,
     infection_probability=10,
-    infection_duration=50,
+    infection_duration=30,
     death_probability=1,
     mutation_probability=1,
     verbose=True,
     macron=True,
+    market_number=50,
 )
 model.run_model()
 
