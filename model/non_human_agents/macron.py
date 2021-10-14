@@ -4,9 +4,11 @@ from model.non_human_agents.base_non_human import BaseNonHuman
 class Macron(BaseNonHuman):
     def __init__(self, *args):
         super().__init__(*args)
-        self.starting_lockdown_minimal_ratio = 0.25
-        self.stopping_lockdown_minimal_ratio = 0.05
         self.is_global_lockdown = False
+
+        self.starting_lockdown_minimal_ratio = 0.1
+        self.stopping_lockdown_minimal_ratio = 0.02
+        self.lockdown_severity = 50
 
     def step(self):
         infection_ratio = self.get_global_infection_state()
@@ -26,7 +28,7 @@ class Macron(BaseNonHuman):
         if not self.is_global_lockdown:
             humans = self.get_all_humans()
             for human in humans:
-                human.set_lockdown()
+                human.set_lockdown(lockdown_severity=self.lockdown_severity)
             self.is_global_lockdown = True
 
     def stop_global_lockdown(self):

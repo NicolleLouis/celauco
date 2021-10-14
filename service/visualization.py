@@ -10,10 +10,10 @@ class Visualization:
     def get_charts():
         charts = ChartModule(
             [
-                {
-                    "Label": "Healthy",
-                    "Color": "Green"
-                },
+                # {
+                #     "Label": "Healthy",
+                #     "Color": "Green"
+                # },
                 {
                     "Label": "Infected",
                     "Color": "Red"

@@ -10,8 +10,9 @@ model = CelaucoModel(
     infection_probability=10,
     infection_duration=50,
     death_probability=1,
-    mutation_probability=10,
+    mutation_probability=1,
     verbose=True,
+    macron=True,
 )
 model.run_model()
 

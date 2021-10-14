@@ -20,10 +20,12 @@ class BaseHuman(Agent):
         super().__init__(unique_id, model)
         self.infection = None
         self.infection_state = InfectionState.HEALTHY
-        self.infection_knowledge_state = InfectionKnowledgeState.UNAWARE
-        self.lockdown = False
         self.infection_duration = 0
         self.immunity = []
+
+        self.infection_knowledge_state = InfectionKnowledgeState.UNAWARE
+        self.lockdown = False
+        self.lockdown_severity = 100
 
         self.grid = self.model.grid
 
@@ -53,7 +55,7 @@ class BaseHuman(Agent):
         return True
 
     def next_position(self):
-        if self.lockdown:
+        if self.lockdown and ProbabilityService.random_percentage(self.lockdown_severity):
             new_position = MovementService.avoid_agents(agent=self)
         else:
             new_position = MovementService.random_neighbours(agent=self)
@@ -150,8 +152,9 @@ class BaseHuman(Agent):
         if self.is_infected():
             self.set_lockdown()
 
-    def set_lockdown(self):
+    def set_lockdown(self, lockdown_severity):
         self.lockdown = True
+        self.lockdown_severity = lockdown_severity
 
     def set_no_lockdown(self):
         self.lockdown = False
