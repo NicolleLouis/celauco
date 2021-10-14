@@ -1,4 +1,5 @@
 import random
+import uuid
 
 from mesa import Model
 from mesa.time import RandomActivation
@@ -20,9 +21,6 @@ class CelaucoModel(Model):
     def __init__(
             self,
             human_number=20,
-            medic_number=0,
-            gilet_josne_number=0,
-            businessman_number=0,
             initially_infected=1,
             width=10,
             height=10,
@@ -31,7 +29,15 @@ class CelaucoModel(Model):
             death_probability=5,
             mutation_probability=5,
             verbose=False,
+            **kwargs
     ):
+        """
+        :param kwargs:
+        Human Parameters such as:
+            - medic_number
+            - gilet_josne_number
+            - businessman_number
+        """
         super().__init__()
         self.schedule = RandomActivation(self)
         self.grid = MultiGrid(
@@ -67,9 +73,7 @@ class CelaucoModel(Model):
         self.initialise_agents(
             initially_infected=initially_infected,
             human_number=human_number,
-            medic_number=medic_number,
-            gilet_josne_number=gilet_josne_number,
-            businessman_number=businessman_number,
+            **kwargs
         )
 
     def step(self):
@@ -97,12 +101,13 @@ class CelaucoModel(Model):
             except InfectionException:
                 pass
 
-    def add_agent(self, agent_id, agent_class=BaseHuman):
-        agent = agent_class(agent_id, self)
-        self.schedule.add(agent)
+    def add_agents(self, agents_number, agent_class=BaseHuman):
+        for _i in range(agents_number):
+            agent = agent_class(uuid.uuid4(), self)
+            self.schedule.add(agent)
 
-        x, y = GridService.get_random_position(self.grid)
-        self.grid.place_agent(agent, (x, y))
+            x, y = GridService.get_random_position(self.grid)
+            self.grid.place_agent(agent, (x, y))
 
     def kill_human(self, agent):
         if not agent.is_human():
@@ -198,23 +203,17 @@ class CelaucoModel(Model):
             self,
             human_number,
             initially_infected,
-            medic_number,
-            gilet_josne_number,
-            businessman_number,
+            **kwargs
     ):
+        human_classes = {
+            "medic_number": Medic,
+            "gilet_josne_number": GiletJosne,
+            "businessman_number": BusinessMan,
+        }
         # Create agents
-        current_index = 0
-        for index in range(human_number):
-            self.add_agent(agent_id=current_index)
-            current_index += 1
-        for index in range(medic_number):
-            self.add_agent(agent_id=current_index, agent_class=Medic)
-            current_index += 1
-        for index in range(gilet_josne_number):
-            self.add_agent(agent_id=current_index, agent_class=GiletJosne)
-            current_index += 1
-        for index in range(businessman_number):
-            self.add_agent(agent_id=current_index, agent_class=BusinessMan)
-            current_index += 1
+        self.add_agents(agents_number=human_number)
+        for kwarg in kwargs:
+            if kwarg in human_classes:
+                self.add_agents(agents_number=kwargs[kwarg], agent_class=human_classes[kwarg])
 
         self.infect_agent(number_of_agent_to_infect=initially_infected)
