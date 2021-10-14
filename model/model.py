@@ -6,10 +6,10 @@ from mesa.space import MultiGrid
 from mesa.datacollection import DataCollector
 
 from exceptions.infection import InfectionException
-from model.agents.base_agent import CelaucoAgent
-from model.agents.businessman import BusinessMan
-from model.agents.medic import Medic
-from model.agents.gilet_josne import GiletJosne
+from model.human_agents.base_human import BaseHuman
+from model.human_agents.businessman import BusinessMan
+from model.human_agents.gilet_josne import GiletJosne
+from model.human_agents.medic import Medic
 from model.infection import Infection
 from service.grid import GridService
 
@@ -97,14 +97,16 @@ class CelaucoModel(Model):
             except InfectionException:
                 pass
 
-    def add_agent(self, agent_id, agent_class=CelaucoAgent):
+    def add_agent(self, agent_id, agent_class=BaseHuman):
         agent = agent_class(agent_id, self)
         self.schedule.add(agent)
 
         x, y = GridService.get_random_position(self.grid)
         self.grid.place_agent(agent, (x, y))
 
-    def kill_agent(self, agent):
+    def kill_human(self, agent):
+        if not agent.is_human():
+            raise Exception("Should only kill humans")
         self.schedule.remove(agent)
         self.grid.remove_agent(agent)
         self.number_of_dead += 1
@@ -135,37 +137,47 @@ class CelaucoModel(Model):
         return biggest_infection_name
 
     def should_continue(self):
-        agents = self.schedule.agents
-        infected_agents = list(
+        humans = self.get_all_humans()
+        infected_humans = list(
             filter(
-                lambda agent: agent.is_infected(),
-                agents
+                lambda human: human.is_infected(),
+                humans
             )
         )
-        self.running = len(infected_agents) > 0
+        self.running = len(infected_humans) > 0
 
     def number_healthy(self):
-        agents = self.schedule.agents
-        healthy_agents = list(
+        humans = self.get_all_humans()
+        healthy_humans = list(
             filter(
-                lambda agent: agent.is_healthy(),
-                agents
+                lambda human: human.is_healthy(),
+                humans
             )
         )
-        return len(healthy_agents)
+        return len(healthy_humans)
 
     def number_infected(self):
-        agents = self.schedule.agents
-        infected_agents = list(
+        humans = self.get_all_humans()
+        infected_humans = list(
             filter(
-                lambda agent: agent.is_infected(),
-                agents
+                lambda human: human.is_infected(),
+                humans
             )
         )
-        return len(infected_agents)
+        return len(infected_humans)
 
     def number_dead(self):
         return self.number_of_dead
+
+    def get_all_humans(self):
+        agents = self.schedule.agents
+        humans = list(
+            filter(
+                lambda agent: agent.is_human(),
+                agents
+            )
+        )
+        return humans
 
     def compute_variant_data(self):
         agents = self.schedule.agents

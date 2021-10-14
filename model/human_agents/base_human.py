@@ -8,14 +8,12 @@ from service.movement import MovementService
 from service.probability import ProbabilityService
 
 
-class CelaucoAgent(Agent):
+class BaseHuman(Agent):
     """
     Base Agent class, function to override:
     - move()
     - additional_step()
     - display()
-
-    ToDo: change immunity to only trigger on accurate variant
     """
 
     def __init__(self, unique_id, model):
@@ -23,6 +21,7 @@ class CelaucoAgent(Agent):
         self.infection = None
         self.infection_state = InfectionState.HEALTHY
         self.infection_knowledge_state = InfectionKnowledgeState.UNAWARE
+        self.lockdown = False
         self.infection_duration = 0
         self.immunity = []
 
@@ -39,7 +38,7 @@ class CelaucoAgent(Agent):
         self.model.grid.move_agent(self, new_position)
 
     def next_position(self):
-        if self.is_infected() and self.is_aware():
+        if self.lockdown:
             new_position = MovementService.avoid_agents(agent=self)
         else:
             new_position = MovementService.random_neighbours(agent=self)
@@ -111,7 +110,9 @@ class CelaucoAgent(Agent):
         if self.infection_state != InfectionState.INFECTED:
             raise SystemError("A non infected agent cannot become immune")
         self.infection_state = InfectionState.HEALTHY
-        self.infection_knowledge_state = InfectionKnowledgeState.UNAWARE
+        if self.is_aware():
+            self.infection_knowledge_state = InfectionKnowledgeState.UNAWARE
+            self.lockdown = False
         if infection.infection_id not in self.immunity:
             self.immunity.append(infection.infection_id)
 
@@ -122,10 +123,16 @@ class CelaucoAgent(Agent):
         self.infection.infection_score += 10
         self.infection.victim_number += 1
 
-        self.model.kill_agent(agent=self)
+        self.model.kill_human(agent=self)
 
     def set_aware(self):
         self.infection_knowledge_state = InfectionKnowledgeState.AWARE
+        if self.is_infected():
+            self.lockdown = True
+
+    @staticmethod
+    def is_human():
+        return True
 
     def additional_step(self):
         """
@@ -151,7 +158,7 @@ class CelaucoAgent(Agent):
         }
         if self.is_infected():
             data["Color"] = "red"
-        if self.is_aware():
+        if self.lockdown:
             data["Color"] = "yellow"
 
         return data

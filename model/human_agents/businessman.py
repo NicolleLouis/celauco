@@ -1,9 +1,9 @@
-from model.agents.base_agent import CelaucoAgent
+from model.human_agents.base_human import BaseHuman
 from service.movement import MovementService
 from service.probability import ProbabilityService
 
 
-class BusinessMan(CelaucoAgent):
+class BusinessMan(BaseHuman):
     flight_probability = 5
 
     def __init__(self, *args):

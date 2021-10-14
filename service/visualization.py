@@ -56,7 +56,7 @@ class Visualization:
         )
         gilet_josne_number = UserSettableParameter(
             param_type="slider",
-            name="Gilet Josne number",
+            name="Party Monsters number",
             value=0,
             min_value=0,
             max_value=size,
@@ -82,6 +82,13 @@ class Visualization:
             min_value=0,
             max_value=100,
         )
+        mutation_probability = UserSettableParameter(
+            param_type="slider",
+            name="Mutation Probability",
+            value=5,
+            min_value=0,
+            max_value=100,
+        )
         sliders = {
             "human_number": human_number,
             "infection_probability": infection_probability,
@@ -90,6 +97,7 @@ class Visualization:
             "medic_number": medic_number,
             "gilet_josne_number": gilet_josne_number,
             "businessman_number": businessman_number,
+            "mutation_probability": mutation_probability,
         }
         return sliders
 
@@ -114,7 +122,7 @@ class Visualization:
                 "medic_number": sliders["medic_number"],
                 "gilet_josne_number": sliders["gilet_josne_number"],
                 "businessman_number": sliders["businessman_number"],
-                # "initially_infected": sliders["initially_infected"],
+                "mutation_probability": sliders["mutation_probability"],
                 "width": size,
                 "height": size,
             }

@@ -1,8 +1,8 @@
-from model.agents.base_agent import CelaucoAgent
+from model.human_agents.base_human import BaseHuman
 from service.movement import MovementService
 
 
-class Medic(CelaucoAgent):
+class Medic(BaseHuman):
     def additional_step(self):
         self.tell_agent_about_infection()
 

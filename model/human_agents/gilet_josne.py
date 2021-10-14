@@ -1,8 +1,8 @@
-from model.agents.base_agent import CelaucoAgent
+from model.human_agents.base_human import BaseHuman
 from service.movement import MovementService
 
 
-class GiletJosne(CelaucoAgent):
+class GiletJosne(BaseHuman):
     def next_position(self):
         new_position = MovementService.search_agents(agent=self)
         return new_position
@@ -11,6 +11,7 @@ class GiletJosne(CelaucoAgent):
         data = super().display()
         data["scale"] = 0.9
         data["Layer"] = 0.5
+        # data["Shape"] = "images/beer"
         if self.is_healthy():
             data["Shape"] = "images/gilet_josne"
         if self.is_infected():
