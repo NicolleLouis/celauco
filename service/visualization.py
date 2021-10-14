@@ -90,14 +90,14 @@ class Visualization:
         death_probability = UserSettableParameter(
             param_type="slider",
             name="Death probabity (*0.1)",
-            value=5,
+            value=1,
             min_value=0,
             max_value=100,
         )
         mutation_probability = UserSettableParameter(
             param_type="slider",
             name="Mutation Probability",
-            value=5,
+            value=1,
             min_value=0,
             max_value=100,
         )
