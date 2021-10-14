@@ -3,13 +3,12 @@ import uuid
 
 from mesa import Model
 from mesa.time import RandomActivation
-from mesa.space import MultiGrid
 from mesa.datacollection import DataCollector
 
 from exceptions.infection import InfectionException
 from model.human_agents.base_human import BaseHuman
 from model.infection import Infection
-from service.grid import GridService
+from model.grid import Grid
 
 
 class CelaucoModel(Model):
@@ -44,10 +43,9 @@ class CelaucoModel(Model):
         super().__init__()
 
         self.schedule = RandomActivation(self)
-        self.grid = MultiGrid(
+        self.grid = Grid(
             width=width,
             height=height,
-            torus=False
         )
         self.running = True
         self.turn_number = 0
@@ -123,8 +121,7 @@ class CelaucoModel(Model):
             self.schedule.add(agent)
 
             if isinstance(agent, BaseHuman) or agent.is_in_grid():
-                x, y = GridService.get_random_position(self.grid)
-                self.grid.place_agent(agent, (x, y))
+                self.grid.place_agent_randomly(agent)
 
     def kill_human(self, agent):
         if not isinstance(agent, BaseHuman):

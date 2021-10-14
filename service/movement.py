@@ -1,11 +1,8 @@
-from service.grid import GridService
-
-
 class MovementService:
     @staticmethod
     def random_neighbours(agent):
         new_position = agent.random.choice(
-            GridService.get_agent_neighbour_position(
+            agent.model.grid.get_agent_neighbour_position(
                 agent=agent
             )
         )
@@ -30,16 +27,15 @@ class MovementService:
 
     @staticmethod
     def avoid_agents(agent):
+        grid = agent.model.grid
         best_positions = [agent.pos]
         minimum_agent_neighbours = 9
-        for position in GridService.get_agent_neighbour_position(
+        for position in grid.get_agent_neighbour_position(
                 agent=agent
         ):
             number_of_agent_neighbours = len(
-                GridService.get_grid_content(
-                    grid=agent.model.grid,
-                    positions=GridService.get_neighbour_position(
-                        grid=agent.model.grid,
+                grid.get_grid_content(
+                    positions=grid.get_neighbour_position(
                         position=position
                     )
                 )
@@ -53,16 +49,15 @@ class MovementService:
 
     @staticmethod
     def search_agents(agent):
+        grid = agent.model.grid
         best_positions = []
         maximum_agent_neighbours = 0
-        for position in GridService.get_agent_neighbour_position(
+        for position in grid.get_agent_neighbour_position(
                 agent=agent
         ):
             number_of_agent_neighbours = len(
-                GridService.get_grid_content(
-                    grid=agent.model.grid,
-                    positions=GridService.get_neighbour_position(
-                        grid=agent.model.grid,
+                grid.get_grid_content(
+                    positions=grid.get_neighbour_position(
                         position=position
                     )
                 )
@@ -76,5 +71,5 @@ class MovementService:
 
     @staticmethod
     def random_position(agent):
-        new_position = GridService.get_random_position(agent.model.grid)
+        new_position = agent.model.grid.get_random_position()
         return new_position

@@ -1,6 +1,5 @@
 from model.human_agents.base_human import BaseHuman
 from model.non_human_agents.base_non_human import BaseNonHuman
-from service.grid import GridService
 from service.movement import MovementService
 from service.probability import ProbabilityService
 
@@ -11,6 +10,8 @@ class Market(BaseNonHuman):
         self.detection_range = 5
         self.attraction_probability = 10
 
+        self.grid = self.model.grid
+
     def step(self):
         humans = self.get_human_inside_detection_range()
         for human in humans:
@@ -18,9 +19,8 @@ class Market(BaseNonHuman):
                 self.attract_human(human)
 
     def get_human_inside_detection_range(self):
-        agents_in_detection_range = GridService.get_grid_content(
-            grid=self.model.grid,
-            positions=GridService.get_agent_neighbour_position(
+        agents_in_detection_range = self.grid.get_grid_content(
+            positions=self.grid.get_agent_neighbour_position(
                 agent=self,
                 radius=self.detection_range
             )

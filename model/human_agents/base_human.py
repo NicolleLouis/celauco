@@ -2,7 +2,6 @@ from mesa import Agent
 
 from constants.player_state import InfectionState, InfectionKnowledgeState
 from exceptions.infection import InfectionException
-from service.grid import GridService
 from service.infection_service import InfectionService
 from service.movement import MovementService
 from service.probability import ProbabilityService
@@ -26,6 +25,8 @@ class BaseHuman(Agent):
         self.infection_duration = 0
         self.immunity = []
 
+        self.grid = self.model.grid
+
     def step(self):
         self.move()
         self.additional_step()
@@ -39,7 +40,7 @@ class BaseHuman(Agent):
         self.modify_position(new_position)
 
     def modify_position(self, position):
-        self.model.grid.move_agent(self, position)
+        self.grid.move_agent(self, position)
 
     @staticmethod
     def can_be_moved(object_class):
@@ -88,9 +89,8 @@ class BaseHuman(Agent):
                 neighbour.set_infected(self.infection)
 
     def get_neighbors(self):
-        neighbors = GridService.get_grid_content(
-            grid=self.model.grid,
-            positions=GridService.get_agent_neighbour_position(
+        neighbors = self.grid.get_grid_content(
+            positions=self.grid.get_agent_neighbour_position(
                 agent=self
             )
         )
