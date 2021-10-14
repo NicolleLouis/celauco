@@ -101,6 +101,13 @@ class Visualization:
             min_value=0,
             max_value=100,
         )
+        market_number = UserSettableParameter(
+            param_type="slider",
+            name="Market Number",
+            value=0,
+            min_value=0,
+            max_value=10,
+        )
         sliders = {
             "human_number": human_number,
             "infection_probability": infection_probability,
@@ -110,6 +117,7 @@ class Visualization:
             "gilet_josne_number": gilet_josne_number,
             "businessman_number": businessman_number,
             "mutation_probability": mutation_probability,
+            "market_number": market_number,
         }
         return sliders
 
@@ -136,6 +144,7 @@ class Visualization:
                 "gilet_josne_number": sliders["gilet_josne_number"],
                 "businessman_number": sliders["businessman_number"],
                 "mutation_probability": sliders["mutation_probability"],
+                "market_number": sliders["market_number"],
                 "width": size,
                 "height": size,
                 "macron": options["macron"],

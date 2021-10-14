@@ -12,6 +12,23 @@ class MovementService:
         return new_position
 
     @staticmethod
+    def move_toward_agent(moving_agent, target_agent):
+        agent_x, agent_y = moving_agent.pos
+        position_x, position_y = target_agent.pos
+        new_position_x = agent_x
+        new_position_y = agent_y
+        if agent_x > position_x:
+            new_position_x -= 1
+        elif agent_x < position_x:
+            new_position_x += 1
+        if agent_y > position_y:
+            new_position_y -= 1
+        elif agent_y < position_y:
+            new_position_y += 1
+
+        return new_position_x, new_position_y
+
+    @staticmethod
     def avoid_agents(agent):
         best_positions = [agent.pos]
         minimum_agent_neighbours = 9

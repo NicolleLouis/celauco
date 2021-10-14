@@ -32,9 +32,12 @@ class CelaucoModel(Model):
         """
         :param kwargs:
         Human Parameters such as:
-            - medic_number
-            - gilet_josne_number
-            - businessman_number
+            - medic_number: int
+            - gilet_josne_number: int
+            - businessman_number: int
+        Non Human Parameters such as:
+            - macron: bool
+            - market_number: int
         """
         super().__init__()
 
@@ -212,16 +215,18 @@ class CelaucoModel(Model):
             initially_infected,
             **kwargs
     ):
-        from model.non_human_agents.macron import Macron
         from model.human_agents.businessman import BusinessMan
         from model.human_agents.gilet_josne import GiletJosne
         from model.human_agents.medic import Medic
+        from model.non_human_agents.macron import Macron
+        from model.non_human_agents.market import Market
 
         agent_classes = {
             "medic_number": Medic,
             "gilet_josne_number": GiletJosne,
             "businessman_number": BusinessMan,
             "macron": Macron,
+            "market_number": Market,
         }
         # Create agents
         self.add_agents(agents_number=human_number)

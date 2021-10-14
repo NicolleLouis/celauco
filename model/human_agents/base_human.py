@@ -14,6 +14,7 @@ class BaseHuman(Agent):
     - move()
     - additional_step()
     - display()
+    - can_be_moved()
     """
 
     def __init__(self, unique_id, model):
@@ -35,7 +36,20 @@ class BaseHuman(Agent):
 
     def move(self):
         new_position = self.next_position()
-        self.model.grid.move_agent(self, new_position)
+        self.modify_position(new_position)
+
+    def modify_position(self, position):
+        self.model.grid.move_agent(self, position)
+
+    @staticmethod
+    def can_be_moved(object_class):
+        """
+        Tells another instance if this instance can moves us based on its class.
+        Default is True.
+        :param object_class: the class of the object asking
+        :return: True or False
+        """
+        return True
 
     def next_position(self):
         if self.lockdown:
@@ -74,13 +88,19 @@ class BaseHuman(Agent):
                 neighbour.set_infected(self.infection)
 
     def get_neighbors(self):
-        neighbours = GridService.get_grid_content(
+        neighbors = GridService.get_grid_content(
             grid=self.model.grid,
             positions=GridService.get_agent_neighbour_position(
                 agent=self
             )
         )
-        return neighbours
+        neighbors = list(
+            filter(
+                lambda neighbor: isinstance(neighbor, BaseHuman),
+                neighbors
+            )
+        )
+        return neighbors
 
     def can_be_infected(self, infection):
         return self.infection_state == InfectionState.HEALTHY and not self.is_immune(infection)
