@@ -10,7 +10,7 @@ from service.probability import ProbabilityService
 
 class BaseHuman(Agent):
     """
-    Base Agent class, function to override:
+    Base Human class, function to override:
     - move()
     - additional_step()
     - display()
@@ -128,11 +128,13 @@ class BaseHuman(Agent):
     def set_aware(self):
         self.infection_knowledge_state = InfectionKnowledgeState.AWARE
         if self.is_infected():
-            self.lockdown = True
+            self.set_lockdown()
 
-    @staticmethod
-    def is_human():
-        return True
+    def set_lockdown(self):
+        self.lockdown = True
+
+    def set_no_lockdown(self):
+        self.lockdown = False
 
     def additional_step(self):
         """
@@ -159,6 +161,6 @@ class BaseHuman(Agent):
         if self.is_infected():
             data["Color"] = "red"
         if self.lockdown:
-            data["Color"] = "yellow"
+            data["Color"] = "blue"
 
         return data

@@ -32,6 +32,18 @@ class Visualization:
         return agent.display()
 
     @staticmethod
+    def get_options():
+        macron = UserSettableParameter(
+            param_type="checkbox",
+            name="Macron",
+            value=False,
+        )
+        options = {
+            "macron": macron
+        }
+        return options
+
+    @staticmethod
     def get_sliders(size):
         human_number = UserSettableParameter(
             param_type="slider",
@@ -111,6 +123,7 @@ class Visualization:
             canvas_height=500,
         )
         sliders = cls.get_sliders(size=size)
+        options = cls.get_options()
         server = ModularServer(
             model_cls=CelaucoModel,
             visualization_elements=[grid, cls.get_charts()],
@@ -125,6 +138,7 @@ class Visualization:
                 "mutation_probability": sliders["mutation_probability"],
                 "width": size,
                 "height": size,
+                "macron": options["macron"],
             }
         )
         server.port = 8521

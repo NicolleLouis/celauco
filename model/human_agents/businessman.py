@@ -7,7 +7,7 @@ class BusinessMan(BaseHuman):
     flight_probability = 5
 
     def __init__(self, *args):
-        super(BusinessMan, self).__init__(*args)
+        super().__init__(*args)
         self.is_flying = False
 
     def next_position(self):
