@@ -1,4 +1,4 @@
-from model.model import CelaucoModel
+from model.model.model import CelaucoModel
 import pandas as pd
 
 

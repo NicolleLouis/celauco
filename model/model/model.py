@@ -3,12 +3,12 @@ import uuid
 
 from mesa import Model
 from mesa.time import RandomActivation
-from mesa.datacollection import DataCollector
 
 from exceptions.infection import InfectionException
 from model.human_agents.base_human import BaseHuman
 from model.infection import Infection
-from model.grid import Grid
+from model.model.grid import Grid
+from model.model.model_data_collector import ModelDataCollector
 
 
 class CelaucoModel(Model):
@@ -61,25 +61,12 @@ class CelaucoModel(Model):
         self.number_of_dead = 0
         self.known_infections = [self.infection]
 
-        self.graph_collector = DataCollector(
-            model_reporters={
-                "Healthy": self.number_healthy,
-                "Infected": self.number_infected,
-                "Dead": self.number_dead,
-            },
-        )
-
         if "log_variant_info" in kwargs:
             self.log_variant_info = kwargs["log_variant_info"]
         else:
             self.log_variant_info = True
 
-        if self.log_variant_info:
-            self.variant_collector = DataCollector(
-                model_reporters={
-                    "variant_data": self.compute_variant_data,
-                },
-            )
+        self.setup_graph_collector()
 
         self.verbose = verbose
 
@@ -171,29 +158,6 @@ class CelaucoModel(Model):
         )
         self.running = len(infected_humans) > 0
 
-    def number_healthy(self):
-        humans = self.get_all_humans()
-        healthy_humans = list(
-            filter(
-                lambda human: human.is_healthy(),
-                humans
-            )
-        )
-        return len(healthy_humans)
-
-    def number_infected(self):
-        humans = self.get_all_humans()
-        infected_humans = list(
-            filter(
-                lambda human: human.is_infected(),
-                humans
-            )
-        )
-        return len(infected_humans)
-
-    def number_dead(self):
-        return self.number_of_dead
-
     def get_all_humans(self):
         return self.get_all_agent_of_class(BaseHuman)
 
@@ -207,20 +171,11 @@ class CelaucoModel(Model):
         )
         return filtered_agents
 
-    def compute_variant_data(self):
-        humans = self.get_all_humans()
-        variant_data = {}
-        infected_agents = filter(
-            lambda human: human.is_infected(),
-            humans
-        )
-        for infected_human in infected_agents:
-            infection_name = infected_human.infection.name
-            if infection_name in variant_data:
-                variant_data[infection_name] += 1
-            else:
-                variant_data[infection_name] = 1
-        return variant_data
+    def setup_graph_collector(self):
+        self.data_collector = ModelDataCollector(model=self)
+        self.graph_collector = self.data_collector.generate_graph_collector()
+        if self.log_variant_info:
+            self.variant_collector = self.data_collector.generate_variant_collector()
 
     def initialise_agents(
             self,

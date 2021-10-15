@@ -2,7 +2,7 @@ from mesa.visualization.ModularVisualization import ModularServer
 from mesa.visualization.UserParam import UserSettableParameter
 from mesa.visualization.modules import CanvasGrid
 from mesa.visualization.modules import ChartModule
-from model.model import CelaucoModel
+from model.model.model import CelaucoModel
 from service.geographic_service import GeographicService
 
 

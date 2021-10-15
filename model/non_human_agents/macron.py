@@ -23,7 +23,7 @@ class Macron(BaseNonHuman):
 
     def get_global_infection_state(self):
         humans_number = len(self.get_all_humans())
-        infected_number = self.model.number_infected()
+        infected_number = self.model.data_collector.number_infected()
         return infected_number/humans_number
 
     def start_global_lockdown(self):
