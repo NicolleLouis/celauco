@@ -9,6 +9,7 @@ from exceptions.infection import InfectionException
 from model.human_agents.base_human import BaseHuman
 from model.infection import Infection
 from model.grid import Grid
+from model.non_human_agents.wall import Wall
 
 
 class CelaucoModel(Model):
@@ -253,13 +254,14 @@ class CelaucoModel(Model):
             if kwarg in agent_classes:
                 if isinstance(kwargs[kwarg], int):
                     agents_number = kwargs[kwarg]
+                    self.add_agents_randomly(agents_number=agents_number, agent_class=agent_classes[kwarg])
                 elif isinstance(kwargs[kwarg], bool):
                     if kwargs[kwarg]:
                         agents_number = 1
+                        self.add_agents_randomly(agents_number=agents_number, agent_class=agent_classes[kwarg])
                 elif isinstance(kwargs[kwarg], list):
                     self.add_agents_in_position(agent_class=agent_classes[kwarg], positions=kwargs[kwarg])
                 else:
                     raise Exception('Agent number must be a int or a bool')
-                self.add_agents_randomly(agents_number=agents_number, agent_class=agent_classes[kwarg])
 
         self.infect_agent(number_of_agent_to_infect=initially_infected)
