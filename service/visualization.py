@@ -7,6 +7,46 @@ from service.geographic_service import GeographicService
 
 
 class Visualization:
+    @classmethod
+    def display_model(cls, size=100):
+        grid = CanvasGrid(
+            portrayal_method=cls.agent_portrayal,
+            grid_width=size,
+            grid_height=size,
+            canvas_width=500,
+            canvas_height=500,
+        )
+        geographic_service = GeographicService(
+            width=size,
+            height=size,
+        )
+        sliders = cls.get_sliders(size=size)
+        options = cls.get_options()
+        wall_positions = geographic_service.vertical_line_positions()
+        server = ModularServer(
+            model_cls=CelaucoModel,
+            visualization_elements=[grid, cls.get_charts()],
+            model_params={
+                "human_number": sliders["human_number"],
+                "infection_probability": sliders["infection_probability"],
+                "infection_duration": sliders["infection_duration"],
+                "death_probability": sliders["death_probability"],
+                "gilet_josne_number": sliders["gilet_josne_number"],
+                "businessman_number": sliders["businessman_number"],
+                "mutation_probability": sliders["mutation_probability"],
+                "market_number": sliders["market_number"],
+                "width": size,
+                "height": size,
+                "macron": options["macron"],
+                "hospital": options["hospital"],
+                "maximum_number_of_turn": 10000,
+                # "wall_positions": wall_positions,
+            }
+        )
+        server.port = 8521
+        server.launch()
+
+
     @staticmethod
     def get_charts():
         charts = ChartModule(
@@ -39,8 +79,14 @@ class Visualization:
             name="Macron",
             value=False,
         )
+        hospital = UserSettableParameter(
+            param_type="checkbox",
+            name="Hospital",
+            value=False,
+        )
         options = {
-            "macron": macron
+            "macron": macron,
+            "hospital": hospital,
         }
         return options
 
@@ -59,13 +105,6 @@ class Visualization:
             value=0,
             min_value=0,
             max_value=size*size,
-        )
-        medic_number = UserSettableParameter(
-            param_type="slider",
-            name="Medic number",
-            value=0,
-            min_value=0,
-            max_value=size,
         )
         gilet_josne_number = UserSettableParameter(
             param_type="slider",
@@ -114,49 +153,9 @@ class Visualization:
             "infection_probability": infection_probability,
             "infection_duration": infection_duration,
             "death_probability": death_probability,
-            "medic_number": medic_number,
             "gilet_josne_number": gilet_josne_number,
             "businessman_number": businessman_number,
             "mutation_probability": mutation_probability,
             "market_number": market_number,
         }
         return sliders
-
-    @classmethod
-    def display_model(cls, size=100):
-        grid = CanvasGrid(
-            portrayal_method=cls.agent_portrayal,
-            grid_width=size,
-            grid_height=size,
-            canvas_width=500,
-            canvas_height=500,
-        )
-        geographic_service = GeographicService(
-            width=size,
-            height=size,
-        )
-        sliders = cls.get_sliders(size=size)
-        options = cls.get_options()
-        wall_positions = geographic_service.vertical_line_middle_hole_positions()
-        server = ModularServer(
-            model_cls=CelaucoModel,
-            visualization_elements=[grid, cls.get_charts()],
-            model_params={
-                "human_number": sliders["human_number"],
-                "infection_probability": sliders["infection_probability"],
-                "infection_duration": sliders["infection_duration"],
-                "death_probability": sliders["death_probability"],
-                "medic_number": sliders["medic_number"],
-                "gilet_josne_number": sliders["gilet_josne_number"],
-                "businessman_number": sliders["businessman_number"],
-                "mutation_probability": sliders["mutation_probability"],
-                "market_number": sliders["market_number"],
-                "width": size,
-                "height": size,
-                "macron": options["macron"],
-                "maximum_number_of_turn": 10000,
-                "wall_positions": wall_positions,
-            }
-        )
-        server.port = 8521
-        server.launch()

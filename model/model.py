@@ -9,7 +9,6 @@ from exceptions.infection import InfectionException
 from model.human_agents.base_human import BaseHuman
 from model.infection import Infection
 from model.grid import Grid
-from model.non_human_agents.wall import Wall
 
 
 class CelaucoModel(Model):
@@ -32,13 +31,13 @@ class CelaucoModel(Model):
         """
         :param kwargs:
         Human Parameters:
-            - medic_number: int
             - gilet_josne_number: int
             - businessman_number: int
         Non Human Parameters:
             - macron: bool
             - market_number: int
             - wall_positions: list(pos)
+            - hospital: bool
         Log paramaters:
             - log_variant_info: default = True
         """
@@ -231,18 +230,18 @@ class CelaucoModel(Model):
     ):
         from model.human_agents.businessman import BusinessMan
         from model.human_agents.gilet_josne import GiletJosne
-        from model.human_agents.medic import Medic
+        from model.non_human_agents.hospital import Hospital
         from model.non_human_agents.macron import Macron
         from model.non_human_agents.market import Market
         from model.non_human_agents.wall import Wall
 
         agent_classes = {
-            "medic_number": Medic,
             "gilet_josne_number": GiletJosne,
             "businessman_number": BusinessMan,
             "macron": Macron,
             "market_number": Market,
             "wall_positions": Wall,
+            "hospital": Hospital,
         }
         # Create agents
         self.add_agents_randomly(agents_number=human_number)

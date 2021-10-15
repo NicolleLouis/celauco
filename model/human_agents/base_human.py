@@ -1,6 +1,6 @@
 from mesa import Agent
 
-from constants.player_state import InfectionState, InfectionKnowledgeState
+from constants.player_state import InfectionState
 from exceptions.infection import InfectionException
 from service.infection_service import InfectionService
 from service.movement import MovementService
@@ -30,7 +30,6 @@ class BaseHuman(Agent):
         self.infection_duration = 0
         self.immunity = []
 
-        self.infection_knowledge_state = InfectionKnowledgeState.UNAWARE
         self.lockdown = False
         self.lockdown_severity = 100
 
@@ -129,19 +128,10 @@ class BaseHuman(Agent):
     def is_immune(self, infection):
         return infection.infection_id in self.immunity
 
-    def is_unaware(self):
-        return self.infection_knowledge_state == InfectionKnowledgeState.UNAWARE
-
-    def is_aware(self):
-        return self.infection_knowledge_state == InfectionKnowledgeState.AWARE
-
     def set_immune(self, infection):
         if self.infection_state != InfectionState.INFECTED:
             raise SystemError("A non infected agent cannot become immune")
         self.infection_state = InfectionState.HEALTHY
-        if self.is_aware():
-            self.infection_knowledge_state = InfectionKnowledgeState.UNAWARE
-            self.lockdown = False
         if infection.infection_id not in self.immunity:
             self.immunity.append(infection.infection_id)
 
@@ -153,18 +143,18 @@ class BaseHuman(Agent):
         if not should_continue:
             return
 
+        self.remove_from_model()
+        self.update_death_data()
+
+    def remove_from_model(self):
         self.model.schedule.remove(self)
         self.grid.remove_agent(self)
 
+    def update_death_data(self):
         self.infection_state = InfectionState.DEAD
         self.infection.infection_score += 10
         self.infection.victim_number += 1
         self.model.add_dead()
-
-    def set_aware(self):
-        self.infection_knowledge_state = InfectionKnowledgeState.AWARE
-        if self.is_infected():
-            self.set_lockdown(100)
 
     def set_lockdown(self, lockdown_severity=100):
         self.lockdown = True
