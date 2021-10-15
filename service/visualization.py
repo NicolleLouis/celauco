@@ -6,7 +6,7 @@ from model.model.model import CelaucoModel
 from service.geographic_service import GeographicService
 
 
-class Visualization:
+class VisualizationService:
     @classmethod
     def display_model(cls, size=100):
         grid = CanvasGrid(
@@ -62,6 +62,10 @@ class Visualization:
                 {
                     "Label": "Dead",
                     "Color": "Black"
+                },
+                {
+                    "Label": "Human in Hospital",
+                    "Color": "Blue"
                 },
             ],
             data_collector_name='graph_collector'

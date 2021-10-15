@@ -37,20 +37,18 @@ class Hospital(BaseNonHuman):
                 self.hospital_death(agent=agent)
 
     def leave_hospital_immune(self, agent):
-        print("I left in good health")
         self.model.schedule.add(agent["agent"])
         self.model.grid.place_agent(agent["agent"], agent["position"])
         self.agents_in_hospital.remove(agent)
 
     def hospital_death(self, agent):
-        print("I left dead")
         agent["agent"].update_death_data()
         self.agents_in_hospital.remove(agent)
 
     def remove_from_hospital(self, agent):
         self.agents_in_hospital.remove(agent)
 
-    def get_human_in_hospital(self):
+    def get_number_of_human_in_hospital(self):
         return len(self.agents_in_hospital)
 
     def human_pre_death_callback(self, agent):

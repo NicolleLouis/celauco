@@ -66,8 +66,6 @@ class CelaucoModel(Model):
         else:
             self.log_variant_info = True
 
-        self.setup_graph_collector()
-
         self.verbose = verbose
 
         self.initialise_agents(
@@ -75,6 +73,7 @@ class CelaucoModel(Model):
             human_number=human_number,
             **kwargs
         )
+        self.setup_graph_collector()
 
     def step(self):
         self.graph_collector.collect(self)
