@@ -2,7 +2,7 @@ class MovementService:
     @staticmethod
     def random_neighbours(agent):
         new_position = agent.random.choice(
-            agent.model.grid.get_agent_neighbour_position(
+            agent.model.grid.get_agent_valid_neighbour_position(
                 agent=agent
             )
         )
@@ -30,7 +30,7 @@ class MovementService:
         grid = agent.model.grid
         best_positions = [agent.pos]
         minimum_agent_neighbours = 9
-        for position in grid.get_agent_neighbour_position(
+        for position in grid.get_agent_valid_neighbour_position(
                 agent=agent
         ):
             number_of_agent_neighbours = len(
@@ -52,7 +52,7 @@ class MovementService:
         grid = agent.model.grid
         best_positions = []
         maximum_agent_neighbours = 0
-        for position in grid.get_agent_neighbour_position(
+        for position in grid.get_agent_valid_neighbour_position(
                 agent=agent
         ):
             number_of_agent_neighbours = len(

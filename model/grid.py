@@ -1,6 +1,8 @@
 import random
 from mesa.space import MultiGrid
 
+from model.non_human_agents.wall import Wall
+
 
 class Grid(MultiGrid):
     def __init__(
@@ -13,10 +15,39 @@ class Grid(MultiGrid):
             height=height,
             torus=False,
         )
+        self.wall_positions = []
 
     def place_agent_randomly(self, agent):
         random_position = self.get_random_position()
         self.place_agent(agent, random_position)
+
+    def place_agent(self, agent, position) -> None:
+        if isinstance(agent, Wall):
+            self.wall_positions.append(position)
+
+        super(Grid, self).place_agent(
+            agent=agent,
+            pos=position
+        )
+
+    def is_position_valid(self, position):
+        if position in self.wall_positions:
+            return False
+        return True
+
+    def get_agent_valid_neighbour_position(self, agent, radius=1):
+        agent_position = agent.pos
+        neighbour_position = self.get_neighbour_position(
+            position=agent_position,
+            radius=radius
+        )
+        neighbour_valid_position = list(
+            filter(
+                lambda position: self.is_position_valid(position=position),
+                neighbour_position
+            )
+        )
+        return neighbour_valid_position
 
     def get_agent_neighbour_position(self, agent, radius=1):
         return self.get_neighbour_position(

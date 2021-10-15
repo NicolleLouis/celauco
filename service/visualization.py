@@ -3,6 +3,7 @@ from mesa.visualization.UserParam import UserSettableParameter
 from mesa.visualization.modules import CanvasGrid
 from mesa.visualization.modules import ChartModule
 from model.model import CelaucoModel
+from service.geographic_service import GeographicService
 
 
 class Visualization:
@@ -122,7 +123,7 @@ class Visualization:
         return sliders
 
     @classmethod
-    def display_model(cls, size=10):
+    def display_model(cls, size=100):
         grid = CanvasGrid(
             portrayal_method=cls.agent_portrayal,
             grid_width=size,
@@ -130,8 +131,13 @@ class Visualization:
             canvas_width=500,
             canvas_height=500,
         )
+        geographic_service = GeographicService(
+            width=size,
+            height=size,
+        )
         sliders = cls.get_sliders(size=size)
         options = cls.get_options()
+        wall_positions = geographic_service.vertical_middle_line_positions()
         server = ModularServer(
             model_cls=CelaucoModel,
             visualization_elements=[grid, cls.get_charts()],
@@ -149,6 +155,7 @@ class Visualization:
                 "height": size,
                 "macron": options["macron"],
                 "maximum_number_of_turn": 10000,
+                "wall_positions": wall_positions,
             }
         )
         server.port = 8521

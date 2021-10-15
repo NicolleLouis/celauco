@@ -10,10 +10,12 @@ model = CelaucoModel(
     infection_probability=10,
     infection_duration=30,
     death_probability=1,
-    mutation_probability=1,
+    mutation_probability=0,
     verbose=True,
     macron=True,
     market_number=50,
+    businessman_number=25,
+    wall_positions=[1, 2, 3],
 )
 model.run_model()
 

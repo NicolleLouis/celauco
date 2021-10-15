@@ -1,0 +1,11 @@
+class GeographicService:
+    def __init__(self, width, height):
+        self.width = width
+        self.height = height
+
+    def vertical_middle_line_positions(self):
+        positions = []
+        middle_position = int(self.width/2)
+        for y in range(self.height):
+            positions.append((middle_position, y))
+        return positions

@@ -3,12 +3,11 @@ from mesa import Agent
 
 class BaseNonHuman(Agent):
     """
-        Base Human class, function to override:
+        Base Non Human class, function to override:
         - step()
         - is_in_grid()
         - display()
     """
-
     def __init__(self, unique_id, model):
         super().__init__(unique_id, model)
 

@@ -19,7 +19,11 @@ class InfectionEvolutionSingleGraphService:
     def clean_data(raw_df):
         cleaned_df = raw_df.rename_axis('Turn Number')
         cleaned_df = cleaned_df.reset_index()
-        cleaned_df = cleaned_df.melt(id_vars=['Turn Number'], value_vars=['Healthy', 'Infected', 'Dead'])
+        cleaned_df = cleaned_df.melt(id_vars=['Turn Number'], value_vars=[
+            # 'Healthy',
+            'Infected',
+            'Dead'
+        ])
         return cleaned_df
 
     @classmethod

@@ -37,6 +37,7 @@ class CelaucoModel(Model):
         Non Human Parameters:
             - macron: bool
             - market_number: int
+            - wall_positions: list(pos)
         Log paramaters:
             - log_variant_info: default = True
         """
@@ -115,13 +116,19 @@ class CelaucoModel(Model):
             except InfectionException:
                 pass
 
-    def add_agents(self, agents_number, agent_class=BaseHuman):
+    def add_agents_randomly(self, agents_number, agent_class=BaseHuman):
         for _i in range(agents_number):
             agent = agent_class(uuid.uuid4(), self)
             self.schedule.add(agent)
 
             if isinstance(agent, BaseHuman) or agent.is_in_grid():
                 self.grid.place_agent_randomly(agent)
+
+    def add_agents_in_position(self, agent_class, positions):
+        for position in positions:
+            agent = agent_class(uuid.uuid4(), self)
+            self.schedule.add(agent)
+            self.grid.place_agent(agent, position)
 
     def kill_human(self, agent):
         if not isinstance(agent, BaseHuman):
@@ -230,6 +237,7 @@ class CelaucoModel(Model):
         from model.human_agents.medic import Medic
         from model.non_human_agents.macron import Macron
         from model.non_human_agents.market import Market
+        from model.non_human_agents.wall import Wall
 
         agent_classes = {
             "medic_number": Medic,
@@ -237,9 +245,10 @@ class CelaucoModel(Model):
             "businessman_number": BusinessMan,
             "macron": Macron,
             "market_number": Market,
+            "wall_positions": Wall,
         }
         # Create agents
-        self.add_agents(agents_number=human_number)
+        self.add_agents_randomly(agents_number=human_number)
         for kwarg in kwargs:
             if kwarg in agent_classes:
                 if isinstance(kwargs[kwarg], int):
@@ -247,8 +256,10 @@ class CelaucoModel(Model):
                 elif isinstance(kwargs[kwarg], bool):
                     if kwargs[kwarg]:
                         agents_number = 1
+                elif isinstance(kwargs[kwarg], list):
+                    self.add_agents_in_position(agent_class=agent_classes[kwarg], positions=kwargs[kwarg])
                 else:
                     raise Exception('Agent number must be a int or a bool')
-                self.add_agents(agents_number=agents_number, agent_class=agent_classes[kwarg])
+                self.add_agents_randomly(agents_number=agents_number, agent_class=agent_classes[kwarg])
 
         self.infect_agent(number_of_agent_to_infect=initially_infected)

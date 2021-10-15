@@ -18,6 +18,7 @@ class BaseHuman(Agent):
 
     def __init__(self, unique_id, model):
         super().__init__(unique_id, model)
+
         self.infection = None
         self.infection_state = InfectionState.HEALTHY
         self.infection_duration = 0
@@ -158,6 +159,10 @@ class BaseHuman(Agent):
 
     def set_no_lockdown(self):
         self.lockdown = False
+
+    @staticmethod
+    def is_in_scheduler():
+        return True
 
     def additional_step(self):
         """

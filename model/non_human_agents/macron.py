@@ -81,4 +81,4 @@ class Macron(BaseNonHuman):
         return False
 
     def display(self):
-        pass
+        return {}

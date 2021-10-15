@@ -41,12 +41,14 @@ class Market(BaseNonHuman):
     def attract_human(self, human):
         if not human.can_be_moved(Market):
             return
-        human.modify_position(
-            MovementService.move_toward_agent(
+        closer_position = MovementService.move_toward_agent(
                 moving_agent=human,
                 target_agent=self
             )
-        )
+        if self.grid.is_position_valid(closer_position):
+            human.modify_position(
+                closer_position
+            )
 
     def set_closed(self):
         self.is_open = False
