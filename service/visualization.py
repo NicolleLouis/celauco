@@ -137,7 +137,7 @@ class Visualization:
         )
         sliders = cls.get_sliders(size=size)
         options = cls.get_options()
-        wall_positions = geographic_service.vertical_middle_line_positions()
+        wall_positions = geographic_service.vertical_line_middle_hole_positions()
         server = ModularServer(
             model_cls=CelaucoModel,
             visualization_elements=[grid, cls.get_charts()],

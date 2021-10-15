@@ -131,11 +131,7 @@ class CelaucoModel(Model):
             self.schedule.add(agent)
             self.grid.place_agent(agent, position)
 
-    def kill_human(self, agent):
-        if not isinstance(agent, BaseHuman):
-            raise Exception("Should only kill humans")
-        self.schedule.remove(agent)
-        self.grid.remove_agent(agent)
+    def add_dead(self):
         self.number_of_dead += 1
 
     def add_known_infection(self, infection):

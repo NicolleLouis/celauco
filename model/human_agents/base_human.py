@@ -14,10 +14,16 @@ class BaseHuman(Agent):
     - additional_step()
     - display()
     - can_be_moved()
+
+    Signals:
+    pre_death_callback:
+        - list of function to run before death, see self.pre_death() function
+        - Interact with the list with: self.add_pre_death_callback
     """
 
     def __init__(self, unique_id, model):
         super().__init__(unique_id, model)
+        self.pre_death_callback = []
 
         self.infection = None
         self.infection_state = InfectionState.HEALTHY
@@ -142,18 +148,25 @@ class BaseHuman(Agent):
     def set_dead(self):
         if self.infection_state != InfectionState.INFECTED:
             raise SystemError("A non infected agent cannot die")
+
+        should_continue = self.pre_death()
+        if not should_continue:
+            return
+
+        self.model.schedule.remove(self)
+        self.grid.remove_agent(self)
+
         self.infection_state = InfectionState.DEAD
         self.infection.infection_score += 10
         self.infection.victim_number += 1
-
-        self.model.kill_human(agent=self)
+        self.model.add_dead()
 
     def set_aware(self):
         self.infection_knowledge_state = InfectionKnowledgeState.AWARE
         if self.is_infected():
-            self.set_lockdown()
+            self.set_lockdown(100)
 
-    def set_lockdown(self, lockdown_severity):
+    def set_lockdown(self, lockdown_severity=100):
         self.lockdown = True
         self.lockdown_severity = lockdown_severity
 
@@ -162,6 +175,24 @@ class BaseHuman(Agent):
 
     @staticmethod
     def is_in_scheduler():
+        return True
+
+    def add_pre_death_callback(self, pre_death_callback):
+        if not hasattr(pre_death_callback, '__call__'):
+            raise Exception("Callback must be a function")
+        self.pre_death_callback.append(pre_death_callback)
+
+    def pre_death(self):
+        """
+        Run all function inside self.pre_death_callback
+        callback argument: agent=self
+        If one of them return false stop the whole death process
+        :return: False if death process should be stopped, True if it should continue
+        """
+        for callback in self.pre_death_callback:
+            result = callback(agent=self)
+            if not result:
+                return False
         return True
 
     def additional_step(self):

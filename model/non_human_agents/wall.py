@@ -2,9 +2,6 @@ from model.non_human_agents.base_non_human import BaseNonHuman
 
 
 class Wall(BaseNonHuman):
-    def __init__(self, *args):
-        super().__init__(*args)
-
     def is_in_grid(self):
         return True
 
