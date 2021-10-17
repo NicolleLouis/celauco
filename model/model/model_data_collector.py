@@ -14,7 +14,7 @@ class ModelDataCollector:
                 "Dead": self.number_dead,
             }
         if len(self.model.get_all_agent_of_class(Hospital)) > 0:
-            model_reporters["Human in Hospital"] = self.human_in_hospital
+            model_reporters["Hospital Occupancy"] = self.human_in_hospital
 
         return DataCollector(
             model_reporters=model_reporters,

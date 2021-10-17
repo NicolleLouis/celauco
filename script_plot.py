@@ -24,7 +24,7 @@ model.run_model()
 graph_services = [
     VariantEvolutionGraphService,
     VariantDeathGraphService,
-    InfectionEvolutionSingleGraphService,
+    InfectionEvolutionSingleGraphService
 ]
 for service in graph_services:
     service.plot(

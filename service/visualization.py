@@ -64,7 +64,7 @@ class VisualizationService:
                     "Color": "Black"
                 },
                 {
-                    "Label": "Human in Hospital",
+                    "Label": "Hospital Occupancy",
                     "Color": "Blue"
                 },
             ],
