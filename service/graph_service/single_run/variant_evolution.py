@@ -7,11 +7,14 @@ class VariantEvolutionGraphService:
     filename = "single/variant_evolution.png"
 
     @classmethod
-    def plot(cls, model):
+    def plot(cls, model, title):
         raw_data = cls.get_raw_variant_data(model)
         biggest_infections_name = model.get_biggest_infections_name()
         cleaned_data = cls.convert_variant_data(raw_data, biggest_infections_name)
-        cls.export_graph_in_file(data=cleaned_data)
+        cls.export_graph_in_file(
+            data=cleaned_data,
+            title=title
+        )
 
     @staticmethod
     def get_raw_variant_data(model):
@@ -36,12 +39,14 @@ class VariantEvolutionGraphService:
     def export_graph_in_file(
             cls,
             data,
+            title
     ):
         plt.figure()
-        sns.lineplot(
+        graph = sns.lineplot(
             y='Number of infected',
             x='Turn Number',
             hue="Variant",
             data=data,
         )
+        graph.set(title=title)
         plt.savefig('graph/{}'.format(cls.filename))

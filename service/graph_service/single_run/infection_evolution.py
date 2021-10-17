@@ -6,10 +6,10 @@ class InfectionEvolutionSingleGraphService:
     filename = "single/infection_evolution"
 
     @classmethod
-    def plot(cls, model):
+    def plot(cls, model, title):
         raw_df = cls.get_raw_variant_data(model)
         cleaned_df = cls.clean_data(raw_df)
-        cls.export_graph_in_file(data=cleaned_df)
+        cls.export_graph_in_file(data=cleaned_df, title=title)
 
     @staticmethod
     def get_raw_variant_data(model):
@@ -30,6 +30,7 @@ class InfectionEvolutionSingleGraphService:
     def export_graph_in_file(
             cls,
             data,
+            title
     ):
         plt.figure()
         palette = {
@@ -45,6 +46,7 @@ class InfectionEvolutionSingleGraphService:
             data=data,
         )
         ax.set(
-            ylabel="Human Number"
+            ylabel="Human Number",
+            title=title
         )
         plt.savefig('graph/{}'.format(cls.filename))

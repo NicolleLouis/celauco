@@ -6,10 +6,14 @@ class VariantDeathGraphService:
     filename = "single/variant_death"
 
     @classmethod
-    def plot(cls, model):
+    def plot(cls, model, title):
         raw_data = cls.get_raw_variant_data(model)
         data, labels = cls.clean_data(raw_data)
-        cls.export_graph_in_file(data=data, labels=labels)
+        cls.export_graph_in_file(
+            data=data,
+            labels=labels,
+            title=title
+        )
 
     @staticmethod
     def get_raw_variant_data(model):
@@ -47,7 +51,9 @@ class VariantDeathGraphService:
             cls,
             data,
             labels,
+            title
     ):
         plt.figure()
+        plt.title(title)
         plt.pie(data, labels=labels, autopct='%.0f%%')
         plt.savefig('graph/{}'.format(cls.filename))
