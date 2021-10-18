@@ -115,11 +115,17 @@ class CelaucoModel(Model):
             agent_parameters=None,
     ):
         for _i in range(agents_number):
-            agent = agent_class(
-                unique_id=uuid.uuid4(),
-                model=self,
-                agent_parameters=agent_parameters,
-            )
+            if agent_parameters is not None:
+                agent = agent_class(
+                    unique_id=uuid.uuid4(),
+                    model=self,
+                    **agent_parameters,
+                )
+            else:
+                agent = agent_class(
+                    unique_id=uuid.uuid4(),
+                    model=self,
+                )
             self.schedule.add(agent)
 
             if isinstance(agent, BaseHuman) or agent.is_in_grid():
@@ -132,11 +138,17 @@ class CelaucoModel(Model):
             agent_parameters=None,
     ):
         for position in positions:
-            agent = agent_class(
-                unique_id=uuid.uuid4(),
-                model=self,
-                agent_parameters=agent_parameters,
-            )
+            if agent_parameters is not None:
+                agent = agent_class(
+                    unique_id=uuid.uuid4(),
+                    model=self,
+                    **agent_parameters,
+                )
+            else:
+                agent = agent_class(
+                    unique_id=uuid.uuid4(),
+                    model=self,
+                )
             self.schedule.add(agent)
             self.grid.place_agent(agent, position)
 
@@ -208,7 +220,10 @@ class CelaucoModel(Model):
         }
 
         if agent_class in equivalent_class_parameters:
-            return equivalent_class_parameters[agent_class]
+            if equivalent_class_parameters[agent_class] in kwargs:
+                print(kwargs[equivalent_class_parameters[agent_class]])
+                return kwargs[equivalent_class_parameters[agent_class]]
+        return None
 
     def initialise_agents(
             self,

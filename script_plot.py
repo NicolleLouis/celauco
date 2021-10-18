@@ -13,6 +13,9 @@ model = CelaucoModel(
     mutation_probability=0,
     verbose=True,
     macron=True,
+    macron_parameters={
+        "starting_lockdown_minimal_ratio": 0.1,
+    },
     market_number=35,
     businessman_number=0,
     hospital=False,
