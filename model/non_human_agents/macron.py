@@ -8,14 +8,17 @@ class Macron(BaseNonHuman):
             unique_id,
             model,
             starting_lockdown_minimal_ratio=10,
+            stopping_lockdown_minimal_ratio=2,
+            lockdown_severity=100,
+            shut_down_market=True,
     ):
         super().__init__(unique_id, model)
         self.is_global_lockdown = False
 
         self.starting_lockdown_minimal_ratio = starting_lockdown_minimal_ratio
-        self.stopping_lockdown_minimal_ratio = 2
-        self.lockdown_severity = 100
-        self.shut_down_market = True
+        self.stopping_lockdown_minimal_ratio = stopping_lockdown_minimal_ratio
+        self.lockdown_severity = lockdown_severity
+        self.shut_down_market = shut_down_market
 
     def step(self):
         infection_ratio = self.get_global_infection_state()
@@ -25,8 +28,6 @@ class Macron(BaseNonHuman):
         if not self.is_global_lockdown:
             if infection_ratio > self.starting_lockdown_minimal_ratio:
                 self.start_global_lockdown()
-
-        print(self.starting_lockdown_minimal_ratio)
 
     def get_global_infection_state(self):
         humans_number = len(self.get_all_humans())

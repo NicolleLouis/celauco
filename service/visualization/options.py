@@ -14,8 +14,14 @@ class OptionService:
             name="Hospital",
             value=False,
         )
+        macron_shut_down_market = UserSettableParameter(
+            param_type="checkbox",
+            name="Macron Shut Down Market",
+            value=False,
+        )
         options = {
             "macron": macron,
+            "macron_shut_down_market": macron_shut_down_market,
             "hospital": hospital,
         }
         return options

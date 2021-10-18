@@ -17,14 +17,14 @@ class CelaucoModel(Model):
 
     def __init__(
             self,
+            width,
+            height,
             human_number=20,
             initially_infected=1,
-            width=10,
-            height=10,
-            infection_probability=25,
-            infection_duration=10,
-            death_probability=5,
-            mutation_probability=5,
+            infection_probability=10,
+            infection_duration=30,
+            death_probability=0,
+            mutation_probability=0,
             verbose=False,
             maximum_number_of_turn=500,
             country_number=1,
@@ -90,6 +90,7 @@ class CelaucoModel(Model):
         self.should_continue()
         if not self.running:
             self.end_step()
+        self.infection.display()
 
     def end_step(self):
         if self.verbose:
@@ -221,7 +222,6 @@ class CelaucoModel(Model):
 
         if agent_class in equivalent_class_parameters:
             if equivalent_class_parameters[agent_class] in kwargs:
-                print(kwargs[equivalent_class_parameters[agent_class]])
                 return kwargs[equivalent_class_parameters[agent_class]]
         return None
 
@@ -271,8 +271,8 @@ class CelaucoModel(Model):
                         )
                 elif isinstance(kwargs[kwarg], list):
                     self.add_agents_in_position(
-                        agent_class=agent_classes[kwarg],
-                        positions=agent_class,
+                        agent_class=agent_class,
+                        positions=kwargs[kwarg],
                         agent_parameters=agent_parameters,
                     )
                 else:

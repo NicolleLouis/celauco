@@ -10,7 +10,7 @@ from service.visualization.sliders import SliderService
 
 class VisualizationService:
     @classmethod
-    def display_model(cls, size=100):
+    def display_model(cls, size=100, display_sliders={}, walls=False):
         grid = CanvasGrid(
             portrayal_method=cls.agent_portrayal,
             grid_width=size,
@@ -18,46 +18,66 @@ class VisualizationService:
             canvas_width=500,
             canvas_height=500,
         )
-        geographic_service = GeographicService(
-            width=size,
-            height=size,
+        model_params = cls.generate_model_params(
+            size=size,
+            display_sliders=display_sliders,
+            walls=walls,
         )
-        sliders = SliderService.get_sliders(size=size)
-        options = OptionService.get_options()
-        wall_positions = geographic_service.vertical_line_positions()
         server = ModularServer(
             model_cls=VisualizationModel,
-            visualization_elements=[grid, cls.get_charts()],
-            model_params={
-                "human_number": sliders["human_number"],
-                "infection_probability": sliders["infection_probability"],
-                "infection_duration": sliders["infection_duration"],
-                "death_probability": sliders["death_probability"],
-                "gilet_josne_number": sliders["gilet_josne_number"],
-                "businessman_number": sliders["businessman_number"],
-                "mutation_probability": sliders["mutation_probability"],
-                "market_number": sliders["market_number"],
-                "width": size,
-                "height": size,
-                "macron": options["macron"],
-                "macron_starting_lockdown_minimal_ratio": sliders['macron_starting_lockdown_minimal_ratio'],
-                "hospital": options["hospital"],
-                "maximum_number_of_turn": 10000,
-                # "wall_positions": wall_positions,
-            }
+            visualization_elements=[grid, cls.get_charts(display_sliders)],
+            model_params=model_params
         )
         server.port = 8521
         server.launch()
 
+    @staticmethod
+    def generate_model_params(size, walls, display_sliders):
+        sliders = SliderService.get_sliders(size=size)
+        options = OptionService.get_options()
+
+        model_params = {
+            "human_number": sliders["human_number"],
+            "width": size,
+            "height": size,
+            "maximum_number_of_turn": 10000,
+        }
+
+        if "infection" in display_sliders and display_sliders["infection"]:
+            model_params["infection_probability"] = sliders["infection_probability"]
+            model_params["infection_duration"] = sliders["infection_duration"]
+            model_params["death_probability"] = sliders["death_probability"]
+            model_params["mutation_probability"] = sliders["mutation_probability"]
+
+        if "macron" in display_sliders and display_sliders["macron"]:
+            model_params["macron"] = options["macron"]
+            model_params["macron_starting_lockdown_minimal_ratio"] = sliders['macron_starting_lockdown_minimal_ratio']
+            model_params["macron_stopping_lockdown_minimal_ratio"] = sliders['macron_stopping_lockdown_minimal_ratio']
+            model_params["macron_lockdown_severity"] = sliders['macron_lockdown_severity']
+            model_params["macron_shut_down_market"] = options['macron_shut_down_market']
+
+        if "hospital" in display_sliders and display_sliders["hospital"]:
+            model_params["hospital"] = options["hospital"]
+
+        if walls:
+            geographic_service = GeographicService(
+                width=size,
+                height=size,
+            )
+            wall_positions = geographic_service.vertical_line_positions()
+            model_params["wall_positions"] = wall_positions
+
+        if "market" in display_sliders and display_sliders["market"]:
+            model_params["market_number"] = sliders["market_number"]
+
+        if "other_humans" in display_sliders and display_sliders["other_humans"]:
+            model_params["gilet_josne_number"] = sliders["gilet_josne_number"]
+            model_params["businessman_number"] = sliders["businessman_number"]
+        return model_params
 
     @staticmethod
-    def get_charts():
-        charts = ChartModule(
-            [
-                # {
-                #     "Label": "Healthy",
-                #     "Color": "Green"
-                # },
+    def get_charts(display_sliders):
+        chart_list = [
                 {
                     "Label": "Infected",
                     "Color": "Red"
@@ -66,11 +86,14 @@ class VisualizationService:
                     "Label": "Dead",
                     "Color": "Black"
                 },
-                {
+            ]
+        if "hospital" in display_sliders and display_sliders["hospital"]:
+            chart_list.append({
                     "Label": "Hospital Occupancy",
                     "Color": "Blue"
-                },
-            ],
+                })
+        charts = ChartModule(
+            chart_list,
             data_collector_name='graph_collector'
         )
         return charts

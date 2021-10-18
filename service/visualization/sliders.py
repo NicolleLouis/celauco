@@ -67,6 +67,21 @@ class SliderService:
             min_value=0,
             max_value=100,
         )
+        macron_stopping_lockdown_minimal_ratio = UserSettableParameter(
+            param_type="slider",
+            name="Lockdown End Ratio",
+            value=5,
+            min_value=0,
+            max_value=100,
+        )
+        macron_lockdown_severity = UserSettableParameter(
+            param_type="slider",
+            name="Lockdown Severity",
+            value=100,
+            min_value=0,
+            max_value=100,
+        )
+
         sliders = {
             "human_number": human_number,
             "infection_probability": infection_probability,
@@ -77,5 +92,7 @@ class SliderService:
             "mutation_probability": mutation_probability,
             "market_number": market_number,
             "macron_starting_lockdown_minimal_ratio": macron_starting_lockdown_minimal_ratio,
+            "macron_stopping_lockdown_minimal_ratio": macron_stopping_lockdown_minimal_ratio,
+            "macron_lockdown_severity": macron_lockdown_severity,
         }
         return sliders
