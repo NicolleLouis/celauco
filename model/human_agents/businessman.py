@@ -4,11 +4,12 @@ from service.probability import ProbabilityService
 
 
 class BusinessMan(BaseHuman):
-    flight_probability = 5
 
-    def __init__(self, unique_id, model, **kwargs):
+    def __init__(self, unique_id, model, flight_probability=5):
         super().__init__(unique_id, model)
         self.is_flying = False
+
+        self.flight_probability = flight_probability
 
     def next_position(self):
         if ProbabilityService.random_percentage(self.flight_probability):

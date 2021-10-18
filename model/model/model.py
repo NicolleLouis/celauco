@@ -215,10 +215,12 @@ class CelaucoModel(Model):
     def get_agent_parameters(self, agent_class, **kwargs):
         from model.non_human_agents.macron import Macron
         from model.non_human_agents.hospital import Hospital
+        from model.human_agents.businessman import BusinessMan
 
         equivalent_class_parameters = {
             Macron: "macron_parameters",
             Hospital: "hospital_parameters",
+            BusinessMan: "businessman_parameters",
         }
 
         if agent_class in equivalent_class_parameters:

@@ -88,6 +88,13 @@ class SliderService:
             min_value=0,
             max_value=100,
         )
+        businessman_flight_probability = UserSettableParameter(
+            param_type="slider",
+            name="Flight Probability",
+            value=5,
+            min_value=0,
+            max_value=100,
+        )
 
         sliders = {
             "human_number": human_number,
@@ -102,5 +109,6 @@ class SliderService:
             "macron_stopping_lockdown_minimal_ratio": macron_stopping_lockdown_minimal_ratio,
             "macron_lockdown_severity": macron_lockdown_severity,
             "hospital_bed": hospital_bed,
+            "businessman_flight_probability": businessman_flight_probability,
         }
         return sliders

@@ -20,6 +20,7 @@ class VisualizationModel(CelaucoModel):
             macron_lockdown_severity=100,
             macron_shut_down_market=True,
             hospital_bed=50,
+            businessman_flight_probability=5,
             **kwargs
     ):
         super().__init__(
@@ -43,5 +44,9 @@ class VisualizationModel(CelaucoModel):
             hospital_parameters={
                 "hospital_bed": hospital_bed,
             },
+            businessman_parameters={
+                "flight_probability": businessman_flight_probability,
+            },
+
             **kwargs
         )

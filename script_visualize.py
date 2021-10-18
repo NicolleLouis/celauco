@@ -6,8 +6,8 @@ VisualizationService.display_model(
     display_sliders={
         "infection": False,
         "macron": False,
-        "hospital": True,
+        "hospital": False,
         "market": False,
-        "other_humans": False,
+        "other_humans": True,
     }
 )

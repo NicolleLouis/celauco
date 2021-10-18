@@ -74,6 +74,7 @@ class VisualizationService:
         if "other_humans" in display_sliders and display_sliders["other_humans"]:
             model_params["gilet_josne_number"] = sliders["gilet_josne_number"]
             model_params["businessman_number"] = sliders["businessman_number"]
+            model_params["businessman_flight_probability"] = sliders["businessman_flight_probability"]
         return model_params
 
     @staticmethod
