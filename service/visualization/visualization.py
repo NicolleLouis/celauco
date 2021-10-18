@@ -58,6 +58,7 @@ class VisualizationService:
 
         if "hospital" in display_sliders and display_sliders["hospital"]:
             model_params["hospital"] = options["hospital"]
+            model_params["hospital_bed"] = sliders["hospital_bed"]
 
         if walls:
             geographic_service = GeographicService(

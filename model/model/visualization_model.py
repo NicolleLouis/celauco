@@ -19,6 +19,7 @@ class VisualizationModel(CelaucoModel):
             macron_stopping_lockdown_minimal_ratio=2,
             macron_lockdown_severity=100,
             macron_shut_down_market=True,
+            hospital_bed=50,
             **kwargs
     ):
         super().__init__(
@@ -38,6 +39,9 @@ class VisualizationModel(CelaucoModel):
                 "stopping_lockdown_minimal_ratio": macron_stopping_lockdown_minimal_ratio,
                 "lockdown_severity": macron_lockdown_severity,
                 "shut_down_market": macron_shut_down_market,
+            },
+            hospital_parameters={
+                "hospital_bed": hospital_bed,
             },
             **kwargs
         )

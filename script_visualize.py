@@ -5,9 +5,9 @@ VisualizationService.display_model(
     walls=False,
     display_sliders={
         "infection": False,
-        "macron": True,
-        "hospital": False,
-        "market": True,
+        "macron": False,
+        "hospital": True,
+        "market": False,
         "other_humans": False,
     }
 )

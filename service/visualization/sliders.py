@@ -81,6 +81,13 @@ class SliderService:
             min_value=0,
             max_value=100,
         )
+        hospital_bed = UserSettableParameter(
+            param_type="slider",
+            name="Hospital bed",
+            value=50,
+            min_value=0,
+            max_value=100,
+        )
 
         sliders = {
             "human_number": human_number,
@@ -94,5 +101,6 @@ class SliderService:
             "macron_starting_lockdown_minimal_ratio": macron_starting_lockdown_minimal_ratio,
             "macron_stopping_lockdown_minimal_ratio": macron_stopping_lockdown_minimal_ratio,
             "macron_lockdown_severity": macron_lockdown_severity,
+            "hospital_bed": hospital_bed,
         }
         return sliders

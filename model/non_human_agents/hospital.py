@@ -3,12 +3,12 @@ from service.probability import ProbabilityService
 
 
 class Hospital(BaseNonHuman):
-    def __init__(self, unique_id, model, **kwargs):
+    def __init__(self, unique_id, model, hospital_bed=50):
         super().__init__(unique_id, model)
         self.add_hospital_callback_to_all_human()
         self.agents_in_hospital = []
 
-        self.hospital_bed = 50
+        self.hospital_bed = hospital_bed
 
     def add_hospital_callback_to_all_human(self):
         humans = self.model.get_all_humans()

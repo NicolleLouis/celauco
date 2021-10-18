@@ -90,7 +90,6 @@ class CelaucoModel(Model):
         self.should_continue()
         if not self.running:
             self.end_step()
-        self.infection.display()
 
     def end_step(self):
         if self.verbose:
@@ -215,9 +214,11 @@ class CelaucoModel(Model):
 
     def get_agent_parameters(self, agent_class, **kwargs):
         from model.non_human_agents.macron import Macron
+        from model.non_human_agents.hospital import Hospital
 
         equivalent_class_parameters = {
-            Macron: "macron_parameters"
+            Macron: "macron_parameters",
+            Hospital: "hospital_parameters",
         }
 
         if agent_class in equivalent_class_parameters:
