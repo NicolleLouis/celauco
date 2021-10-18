@@ -5,8 +5,8 @@ from service.probability import ProbabilityService
 
 
 class Market(BaseNonHuman):
-    def __init__(self, *args):
-        super().__init__(*args)
+    def __init__(self, unique_id, model, **kwargs):
+        super().__init__(unique_id, model)
         self.grid = self.model.grid
 
         self.detection_range = 5

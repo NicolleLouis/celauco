@@ -6,8 +6,8 @@ from service.probability import ProbabilityService
 class BusinessMan(BaseHuman):
     flight_probability = 5
 
-    def __init__(self, *args):
-        super().__init__(*args)
+    def __init__(self, unique_id, model, **kwargs):
+        super().__init__(unique_id, model)
         self.is_flying = False
 
     def next_position(self):

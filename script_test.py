@@ -1,6 +1,4 @@
-from model.batch import Batch
-from service.graph_service.batch_run.infection_evolution import InfectionEvolutionBatchGraphService
+from model.country import Country
 
-batch = Batch(run_number=100)
-batch.run()
-InfectionEvolutionBatchGraphService.plot(batch)
+country = Country(position_bottom_left=(0, 0), position_top_right=(10, 10))
+print(country.positions)

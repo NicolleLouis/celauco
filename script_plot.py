@@ -9,13 +9,13 @@ model = CelaucoModel(
     height=100,
     infection_probability=10,
     infection_duration=30,
-    death_probability=1,
-    mutation_probability=1,
+    death_probability=30,
+    mutation_probability=0,
     verbose=True,
     macron=True,
     market_number=35,
     businessman_number=0,
-    hospital=True,
+    hospital=False,
 )
 title = "Test"
 

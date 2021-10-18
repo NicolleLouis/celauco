@@ -4,7 +4,7 @@ batch:
 plot:
 	python script_plot.py
 
-make test:
+test:
 	python script_test.py
 
 visualize:

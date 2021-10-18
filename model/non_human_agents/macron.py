@@ -3,14 +3,19 @@ from model.non_human_agents.market import Market
 
 
 class Macron(BaseNonHuman):
-    def __init__(self, *args):
-        super().__init__(*args)
+    country_arg = "country"
+
+    def __init__(self, unique_id, model, **kwargs):
+        super().__init__(unique_id, model)
         self.is_global_lockdown = False
 
         self.starting_lockdown_minimal_ratio = 0.1
         self.stopping_lockdown_minimal_ratio = 0.02
         self.lockdown_severity = 100
         self.shut_down_market = True
+
+        if self.country_arg in kwargs:
+            self.country = kwargs[self.country_arg]
 
     def step(self):
         infection_ratio = self.get_global_infection_state()

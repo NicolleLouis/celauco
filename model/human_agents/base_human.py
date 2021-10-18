@@ -21,7 +21,7 @@ class BaseHuman(Agent):
         - Interact with the list with: self.add_pre_death_callback
     """
 
-    def __init__(self, unique_id, model):
+    def __init__(self, unique_id, model, **kwargs):
         super().__init__(unique_id, model)
         self.pre_death_callback = []
 

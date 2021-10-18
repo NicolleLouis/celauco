@@ -9,6 +9,7 @@ from model.human_agents.base_human import BaseHuman
 from model.infection import Infection
 from model.model.grid import Grid
 from model.model.model_data_collector import ModelDataCollector
+from service.geographic_service import GeographicService
 
 
 class CelaucoModel(Model):
@@ -26,6 +27,7 @@ class CelaucoModel(Model):
             mutation_probability=5,
             verbose=False,
             maximum_number_of_turn=500,
+            country_number=1,
             **kwargs
     ):
         """
@@ -48,6 +50,12 @@ class CelaucoModel(Model):
             width=width,
             height=height,
         )
+        self.countries = GeographicService(
+            width=width,
+            height=height
+        ).generate_countries(
+            country_number=country_number
+        )
         self.running = True
         self.turn_number = 0
         self.maximum_number_of_turn = maximum_number_of_turn
@@ -65,9 +73,7 @@ class CelaucoModel(Model):
             self.log_variant_info = kwargs["log_variant_info"]
         else:
             self.log_variant_info = True
-
         self.verbose = verbose
-
         self.initialise_agents(
             initially_infected=initially_infected,
             human_number=human_number,
@@ -102,17 +108,35 @@ class CelaucoModel(Model):
             except InfectionException:
                 pass
 
-    def add_agents_randomly(self, agents_number, agent_class=BaseHuman):
+    def add_agents_randomly(
+            self,
+            agents_number,
+            agent_class=BaseHuman,
+            agent_parameters=None,
+    ):
         for _i in range(agents_number):
-            agent = agent_class(uuid.uuid4(), self)
+            agent = agent_class(
+                unique_id=uuid.uuid4(),
+                model=self,
+                agent_parameters=agent_parameters,
+            )
             self.schedule.add(agent)
 
             if isinstance(agent, BaseHuman) or agent.is_in_grid():
                 self.grid.place_agent_randomly(agent)
 
-    def add_agents_in_position(self, agent_class, positions):
+    def add_agents_in_position(
+            self,
+            agent_class,
+            positions,
+            agent_parameters=None,
+    ):
         for position in positions:
-            agent = agent_class(uuid.uuid4(), self)
+            agent = agent_class(
+                unique_id=uuid.uuid4(),
+                model=self,
+                agent_parameters=agent_parameters,
+            )
             self.schedule.add(agent)
             self.grid.place_agent(agent, position)
 
@@ -176,6 +200,16 @@ class CelaucoModel(Model):
         if self.log_variant_info:
             self.variant_collector = self.data_collector.generate_variant_collector()
 
+    def get_agent_parameters(self, agent_class, **kwargs):
+        from model.non_human_agents.macron import Macron
+
+        equivalent_class_parameters = {
+            Macron: "macron_parameters"
+        }
+
+        if agent_class in equivalent_class_parameters:
+            return equivalent_class_parameters[agent_class]
+
     def initialise_agents(
             self,
             human_number,
@@ -197,19 +231,35 @@ class CelaucoModel(Model):
             "wall_positions": Wall,
             "hospital": Hospital,
         }
+
         # Create agents
         self.add_agents_randomly(agents_number=human_number)
         for kwarg in kwargs:
             if kwarg in agent_classes:
+                agent_class = agent_classes[kwarg]
+                agent_parameters = self.get_agent_parameters(agent_class, **kwargs)
+
                 if isinstance(kwargs[kwarg], int):
                     agents_number = kwargs[kwarg]
-                    self.add_agents_randomly(agents_number=agents_number, agent_class=agent_classes[kwarg])
+                    self.add_agents_randomly(
+                        agents_number=agents_number,
+                        agent_class=agent_class,
+                        agent_parameters=agent_parameters,
+                    )
                 elif isinstance(kwargs[kwarg], bool):
                     if kwargs[kwarg]:
                         agents_number = 1
-                        self.add_agents_randomly(agents_number=agents_number, agent_class=agent_classes[kwarg])
+                        self.add_agents_randomly(
+                            agents_number=agents_number,
+                            agent_class=agent_class,
+                            agent_parameters=agent_parameters,
+                        )
                 elif isinstance(kwargs[kwarg], list):
-                    self.add_agents_in_position(agent_class=agent_classes[kwarg], positions=kwargs[kwarg])
+                    self.add_agents_in_position(
+                        agent_class=agent_classes[kwarg],
+                        positions=agent_class,
+                        agent_parameters=agent_parameters,
+                    )
                 else:
                     raise Exception('Agent number must be a int or a bool')
 

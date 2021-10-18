@@ -8,7 +8,7 @@ class BaseNonHuman(Agent):
         - is_in_grid()
         - display()
     """
-    def __init__(self, unique_id, model):
+    def __init__(self, unique_id, model, **kwargs):
         super().__init__(unique_id, model)
 
     def step(self):
