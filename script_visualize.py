@@ -2,7 +2,7 @@ from service.visualization.visualization import VisualizationService
 
 VisualizationService.display_model(
     size=100,
-    walls=False,
+    walls=True,
     display_sliders={
         "infection": False,
         "macron": True,

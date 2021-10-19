@@ -17,6 +17,12 @@ class VisualizationModel(CelaucoModel):
             macron_starting_lockdown_minimal_ratio=10,
             macron_stopping_lockdown_minimal_ratio=5,
             macron_lockdown_severity=100,
+            macron_starting_lockdown_minimal_ratio_1=10,
+            macron_stopping_lockdown_minimal_ratio_1=5,
+            macron_lockdown_severity_1=100,
+            macron_starting_lockdown_minimal_ratio_2=10,
+            macron_stopping_lockdown_minimal_ratio_2=5,
+            macron_lockdown_severity_2=100,
             macron_shut_down_market=True,
             hospital_bed=50,
             businessman_flight_probability=5,
@@ -27,8 +33,14 @@ class VisualizationModel(CelaucoModel):
             macron_starting_lockdown_minimal_ratio=macron_starting_lockdown_minimal_ratio,
             macron_stopping_lockdown_minimal_ratio=macron_stopping_lockdown_minimal_ratio,
             macron_lockdown_severity=macron_lockdown_severity,
+            macron_starting_lockdown_minimal_ratio_1=macron_starting_lockdown_minimal_ratio_1,
+            macron_stopping_lockdown_minimal_ratio_1=macron_stopping_lockdown_minimal_ratio_1,
+            macron_lockdown_severity_1=macron_lockdown_severity_1,
+            macron_starting_lockdown_minimal_ratio_2=macron_starting_lockdown_minimal_ratio_2,
+            macron_stopping_lockdown_minimal_ratio_2=macron_stopping_lockdown_minimal_ratio_2,
+            macron_lockdown_severity_2=macron_lockdown_severity_2,
             macron_shut_down_market=macron_shut_down_market,
-            countries_number=countries_number
+            countries_number=countries_number,
         )
         super().__init__(
             human_number=human_number,
@@ -60,6 +72,12 @@ class VisualizationModel(CelaucoModel):
             macron_stopping_lockdown_minimal_ratio,
             macron_lockdown_severity,
             macron_shut_down_market,
+            macron_starting_lockdown_minimal_ratio_1,
+            macron_stopping_lockdown_minimal_ratio_1,
+            macron_lockdown_severity_1,
+            macron_starting_lockdown_minimal_ratio_2,
+            macron_stopping_lockdown_minimal_ratio_2,
+            macron_lockdown_severity_2,
     ):
         if countries_number == 1:
             macron_parameters = {
@@ -71,15 +89,15 @@ class VisualizationModel(CelaucoModel):
         elif countries_number == 2:
             macron_parameters = [
                 {
-                    "starting_lockdown_minimal_ratio": macron_starting_lockdown_minimal_ratio,
-                    "stopping_lockdown_minimal_ratio": macron_stopping_lockdown_minimal_ratio,
-                    "lockdown_severity": macron_lockdown_severity,
+                    "starting_lockdown_minimal_ratio": macron_starting_lockdown_minimal_ratio_1,
+                    "stopping_lockdown_minimal_ratio": macron_stopping_lockdown_minimal_ratio_1,
+                    "lockdown_severity": macron_lockdown_severity_1,
                     "shut_down_market": macron_shut_down_market,
                 },
                 {
-                    "starting_lockdown_minimal_ratio": macron_starting_lockdown_minimal_ratio,
-                    "stopping_lockdown_minimal_ratio": macron_stopping_lockdown_minimal_ratio,
-                    "lockdown_severity": macron_lockdown_severity,
+                    "starting_lockdown_minimal_ratio": macron_starting_lockdown_minimal_ratio_2,
+                    "stopping_lockdown_minimal_ratio": macron_stopping_lockdown_minimal_ratio_2,
+                    "lockdown_severity": macron_lockdown_severity_2,
                     "shut_down_market": macron_shut_down_market,
                 }
             ]

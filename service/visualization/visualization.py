@@ -64,10 +64,25 @@ class VisualizationService:
 
         if "macron" in display_sliders and display_sliders["macron"]:
             model_params["macron"] = options["macron"]
-            model_params["macron_starting_lockdown_minimal_ratio"] = sliders['macron_starting_lockdown_minimal_ratio']
-            model_params["macron_stopping_lockdown_minimal_ratio"] = sliders['macron_stopping_lockdown_minimal_ratio']
-            model_params["macron_lockdown_severity"] = sliders['macron_lockdown_severity']
-            model_params["macron_shut_down_market"] = options['macron_shut_down_market']
+            if countries_number == 1:
+                model_params["macron_starting_lockdown_minimal_ratio"] = sliders[
+                    'macron_starting_lockdown_minimal_ratio']
+                model_params["macron_stopping_lockdown_minimal_ratio"] = sliders[
+                    'macron_stopping_lockdown_minimal_ratio']
+                model_params["macron_lockdown_severity"] = sliders['macron_lockdown_severity']
+            if countries_number == 2:
+                model_params["macron_starting_lockdown_minimal_ratio_1"] = sliders[
+                    'macron_starting_lockdown_minimal_ratio_1']
+                model_params["macron_stopping_lockdown_minimal_ratio_1"] = sliders[
+                    'macron_stopping_lockdown_minimal_ratio_1']
+                model_params["macron_lockdown_severity_1"] = sliders['macron_lockdown_severity_1']
+                model_params["macron_starting_lockdown_minimal_ratio_2"] = sliders[
+                    'macron_starting_lockdown_minimal_ratio_2']
+                model_params["macron_stopping_lockdown_minimal_ratio_2"] = sliders[
+                    'macron_stopping_lockdown_minimal_ratio_2']
+                model_params["macron_lockdown_severity_2"] = sliders['macron_lockdown_severity_2']
+            if "market" in display_sliders and display_sliders["market"]:
+                model_params["macron_shut_down_market"] = options['macron_shut_down_market']
 
         if "hospital" in display_sliders and display_sliders["hospital"]:
             model_params["hospital"] = options["hospital"]
@@ -78,7 +93,7 @@ class VisualizationService:
                 width=size,
                 height=size,
             )
-            wall_positions = geographic_service.vertical_line_positions()
+            wall_positions = geographic_service.vertical_line_middle_hole_positions()
             model_params["wall_positions"] = wall_positions
 
         if "market" in display_sliders and display_sliders["market"]:
@@ -93,20 +108,20 @@ class VisualizationService:
     @staticmethod
     def get_charts(display_sliders):
         chart_list = [
-                {
-                    "Label": "Infected",
-                    "Color": "Red"
-                },
-                {
-                    "Label": "Dead",
-                    "Color": "Black"
-                },
-            ]
+            {
+                "Label": "Infected",
+                "Color": "Red"
+            },
+            {
+                "Label": "Dead",
+                "Color": "Black"
+            },
+        ]
         if "hospital" in display_sliders and display_sliders["hospital"]:
             chart_list.append({
-                    "Label": "Hospital Occupancy",
-                    "Color": "Blue"
-                })
+                "Label": "Hospital Occupancy",
+                "Color": "Blue"
+            })
         charts = ChartModule(
             chart_list,
             data_collector_name='graph_collector'

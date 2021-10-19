@@ -81,6 +81,48 @@ class SliderService:
             min_value=0,
             max_value=100,
         )
+        macron_starting_lockdown_minimal_ratio_1 = UserSettableParameter(
+            param_type="slider",
+            name="Lockdown Start Ratio (Left side)",
+            value=10,
+            min_value=0,
+            max_value=100,
+        )
+        macron_stopping_lockdown_minimal_ratio_1 = UserSettableParameter(
+            param_type="slider",
+            name="Lockdown End Ratio (Left side)",
+            value=5,
+            min_value=0,
+            max_value=100,
+        )
+        macron_lockdown_severity_1 = UserSettableParameter(
+            param_type="slider",
+            name="Lockdown Severity (Left side)",
+            value=100,
+            min_value=0,
+            max_value=100,
+        )
+        macron_starting_lockdown_minimal_ratio_2 = UserSettableParameter(
+            param_type="slider",
+            name="Lockdown Start Ratio (Right side)",
+            value=10,
+            min_value=0,
+            max_value=100,
+        )
+        macron_stopping_lockdown_minimal_ratio_2 = UserSettableParameter(
+            param_type="slider",
+            name="Lockdown End Ratio (Right side)",
+            value=5,
+            min_value=0,
+            max_value=100,
+        )
+        macron_lockdown_severity_2 = UserSettableParameter(
+            param_type="slider",
+            name="Lockdown Severity (Right side)",
+            value=100,
+            min_value=0,
+            max_value=100,
+        )
         hospital_bed = UserSettableParameter(
             param_type="slider",
             name="Hospital bed",
@@ -108,6 +150,12 @@ class SliderService:
             "macron_starting_lockdown_minimal_ratio": macron_starting_lockdown_minimal_ratio,
             "macron_stopping_lockdown_minimal_ratio": macron_stopping_lockdown_minimal_ratio,
             "macron_lockdown_severity": macron_lockdown_severity,
+            "macron_starting_lockdown_minimal_ratio_1": macron_starting_lockdown_minimal_ratio_1,
+            "macron_stopping_lockdown_minimal_ratio_1": macron_stopping_lockdown_minimal_ratio_1,
+            "macron_lockdown_severity_1": macron_lockdown_severity_1,
+            "macron_starting_lockdown_minimal_ratio_2": macron_starting_lockdown_minimal_ratio_2,
+            "macron_stopping_lockdown_minimal_ratio_2": macron_stopping_lockdown_minimal_ratio_2,
+            "macron_lockdown_severity_2": macron_lockdown_severity_2,
             "hospital_bed": hospital_bed,
             "businessman_flight_probability": businessman_flight_probability,
         }
