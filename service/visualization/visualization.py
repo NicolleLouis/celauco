@@ -32,7 +32,10 @@ class VisualizationService:
         )
         server = ModularServer(
             model_cls=VisualizationModel,
-            visualization_elements=[grid, cls.get_charts(display_sliders)],
+            visualization_elements=[grid, cls.get_charts(
+                display_sliders=display_sliders,
+                countries_number=countries_number,
+            )],
             model_params=model_params
         )
         server.port = 8521
@@ -116,12 +119,8 @@ class VisualizationService:
         return model_params
 
     @staticmethod
-    def get_charts(display_sliders):
+    def get_charts(display_sliders, countries_number):
         chart_list = [
-            {
-                "Label": "Infected",
-                "Color": "Red"
-            },
             {
                 "Label": "Dead",
                 "Color": "Black"
@@ -132,6 +131,23 @@ class VisualizationService:
                 "Label": "Hospital Occupancy",
                 "Color": "Blue"
             })
+
+        if countries_number == 1:
+            chart_list.append({
+                "Label": "Infected",
+                "Color": "Red"
+            })
+
+        if countries_number == 2:
+            chart_list.append({
+                "Label": "Infected (Left)",
+                "Color": "#58A0EB"
+            })
+            chart_list.append({
+                "Label": "Infected (Right)",
+                "Color": "#112BDF"
+            })
+
         charts = ChartModule(
             chart_list,
             data_collector_name='graph_collector'
