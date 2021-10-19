@@ -10,5 +10,5 @@ VisualizationService.display_model(
         "market": False,
         "other_humans": True,
     },
-    countries_number=2,
+    countries_number=1,
 )
