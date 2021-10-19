@@ -6,14 +6,14 @@ class GeographicService:
         self.width = width
         self.height = height
 
-    def generate_countries(self, country_number=1):
-        if country_number == 1:
+    def generate_countries(self, countries_number=1):
+        if countries_number == 1:
             country = Country(
                 position_bottom_left=(0, 0),
                 position_top_right=(self.width, self.height)
             )
             return [country]
-        if country_number == 2:
+        if countries_number == 2:
             middle_width = int(self.width/2)
             country_1 = Country(
                 position_bottom_left=(0, 0),

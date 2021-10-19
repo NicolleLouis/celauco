@@ -10,7 +10,13 @@ from service.visualization.sliders import SliderService
 
 class VisualizationService:
     @classmethod
-    def display_model(cls, size=100, display_sliders={}, walls=False):
+    def display_model(
+            cls,
+            size=100,
+            display_sliders={},
+            walls=False,
+            countries_number=1,
+    ):
         grid = CanvasGrid(
             portrayal_method=cls.agent_portrayal,
             grid_width=size,
@@ -22,6 +28,7 @@ class VisualizationService:
             size=size,
             display_sliders=display_sliders,
             walls=walls,
+            countries_number=countries_number,
         )
         server = ModularServer(
             model_cls=VisualizationModel,
@@ -32,7 +39,12 @@ class VisualizationService:
         server.launch()
 
     @staticmethod
-    def generate_model_params(size, walls, display_sliders):
+    def generate_model_params(
+            size,
+            walls,
+            display_sliders,
+            countries_number,
+    ):
         sliders = SliderService.get_sliders(size=size)
         options = OptionService.get_options()
 
@@ -41,6 +53,7 @@ class VisualizationService:
             "width": size,
             "height": size,
             "maximum_number_of_turn": 10000,
+            "countries_number": countries_number,
         }
 
         if "infection" in display_sliders and display_sliders["infection"]:

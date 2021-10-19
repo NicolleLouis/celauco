@@ -8,7 +8,7 @@ class Macron(BaseNonHuman):
             unique_id,
             model,
             starting_lockdown_minimal_ratio=10,
-            stopping_lockdown_minimal_ratio=2,
+            stopping_lockdown_minimal_ratio=5,
             lockdown_severity=100,
             shut_down_market=True,
             country=None,
@@ -94,11 +94,8 @@ class Macron(BaseNonHuman):
         for market in markets:
             market.set_open()
 
-    def get_all_humans(self):
-        return self.model.get_all_humans()
-
     def get_all_market(self):
-        return self.model.get_all_agent_of_class(Market)
+        return self.model.get_all_agent_of_class(Market, country=self.country)
 
     def is_in_grid(self):
         return False

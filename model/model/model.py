@@ -27,7 +27,7 @@ class CelaucoModel(Model):
             mutation_probability=0,
             verbose=False,
             maximum_number_of_turn=500,
-            country_number=1,
+            countries_number=1,
             **kwargs
     ):
         """
@@ -54,7 +54,7 @@ class CelaucoModel(Model):
             width=width,
             height=height
         ).generate_countries(
-            country_number=country_number
+            countries_number=countries_number
         )
         self.running = True
         self.turn_number = 0

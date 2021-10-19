@@ -42,6 +42,10 @@ class AgentGenerator:
             "hospital": Hospital,
         }
 
+        custom_generation_function = {
+            Macron: self.generate_macron
+        }
+
         # Create agents
         self.add_agents_randomly(agents_number=human_number)
         for kwarg in kwargs:
@@ -49,7 +53,9 @@ class AgentGenerator:
                 agent_class = agent_classes[kwarg]
                 agent_parameters = self.get_agent_parameters(agent_class, **kwargs)
 
-                if isinstance(kwargs[kwarg], int):
+                if agent_class in custom_generation_function:
+                    custom_generation_function[agent_class](agent_parameters)
+                elif isinstance(kwargs[kwarg], int):
                     agents_number = kwargs[kwarg]
                     self.add_agents_randomly(
                         agents_number=agents_number,
@@ -116,3 +122,19 @@ class AgentGenerator:
                 )
             self.schedule.add(agent)
             self.grid.place_agent(agent, position)
+
+    def generate_macron(self, macron_parameters):
+        if isinstance(macron_parameters, list):
+            for index, macron_parameter in enumerate(macron_parameters):
+                macron_parameter["country"] = self.model.countries[index]
+                self.add_agents_randomly(
+                    agents_number=1,
+                    agent_class=Macron,
+                    agent_parameters=macron_parameter
+                )
+        else:
+            self.add_agents_randomly(
+                agents_number=1,
+                agent_class=Macron,
+                agent_parameters=macron_parameters
+            )

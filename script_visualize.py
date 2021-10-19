@@ -9,5 +9,6 @@ VisualizationService.display_model(
         "hospital": False,
         "market": False,
         "other_humans": False,
-    }
+    },
+    countries_number=2,
 )
