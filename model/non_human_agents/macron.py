@@ -32,9 +32,7 @@ class Macron(BaseNonHuman):
                 self.start_global_lockdown()
 
     def get_all_humans(self):
-        if self.country is not None:
-            return self.model.get_all_humans(country=self.country)
-        self.model.get_all_humans()
+        return self.model.get_all_humans(country=self.country)
 
     def get_global_infection_state(self):
         humans = self.get_all_humans()
