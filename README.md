@@ -41,3 +41,4 @@ If you encounter a bug or an abnormal behaviour, open a github issue and try to 
 
 - I'm a developer, I want to help the project:
   - Easiest way is to contact me directly (louis.a.nicolle@gmail.com)
+  - Some project ideas are listed [here](IDEAS.md)
