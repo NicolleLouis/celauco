@@ -7,8 +7,8 @@ VisualizationService.display_model(
         "infection": False,
         "macron": True,
         "hospital": False,
-        "market": False,
-        "other_humans": False,
+        "market": True,
+        "other_humans": True,
     },
     countries_number=2,
 )

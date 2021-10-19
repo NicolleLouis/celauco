@@ -24,6 +24,8 @@ class VisualizationModel(CelaucoModel):
             macron_stopping_lockdown_minimal_ratio_2=5,
             macron_lockdown_severity_2=100,
             macron_shut_down_market=True,
+            macron_shut_down_market_1=True,
+            macron_shut_down_market_2=True,
             hospital_bed=50,
             businessman_flight_probability=5,
             countries_number=1,
@@ -40,6 +42,8 @@ class VisualizationModel(CelaucoModel):
             macron_stopping_lockdown_minimal_ratio_2=macron_stopping_lockdown_minimal_ratio_2,
             macron_lockdown_severity_2=macron_lockdown_severity_2,
             macron_shut_down_market=macron_shut_down_market,
+            macron_shut_down_market_1=macron_shut_down_market_1,
+            macron_shut_down_market_2=macron_shut_down_market_2,
             countries_number=countries_number,
         )
         super().__init__(
@@ -72,6 +76,8 @@ class VisualizationModel(CelaucoModel):
             macron_stopping_lockdown_minimal_ratio,
             macron_lockdown_severity,
             macron_shut_down_market,
+            macron_shut_down_market_1,
+            macron_shut_down_market_2,
             macron_starting_lockdown_minimal_ratio_1,
             macron_stopping_lockdown_minimal_ratio_1,
             macron_lockdown_severity_1,
@@ -92,13 +98,13 @@ class VisualizationModel(CelaucoModel):
                     "starting_lockdown_minimal_ratio": macron_starting_lockdown_minimal_ratio_1,
                     "stopping_lockdown_minimal_ratio": macron_stopping_lockdown_minimal_ratio_1,
                     "lockdown_severity": macron_lockdown_severity_1,
-                    "shut_down_market": macron_shut_down_market,
+                    "shut_down_market": macron_shut_down_market_1,
                 },
                 {
                     "starting_lockdown_minimal_ratio": macron_starting_lockdown_minimal_ratio_2,
                     "stopping_lockdown_minimal_ratio": macron_stopping_lockdown_minimal_ratio_2,
                     "lockdown_severity": macron_lockdown_severity_2,
-                    "shut_down_market": macron_shut_down_market,
+                    "shut_down_market": macron_shut_down_market_2,
                 }
             ]
         return macron_parameters

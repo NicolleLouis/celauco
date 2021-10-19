@@ -66,23 +66,33 @@ class VisualizationService:
             model_params["macron"] = options["macron"]
             if countries_number == 1:
                 model_params["macron_starting_lockdown_minimal_ratio"] = sliders[
-                    'macron_starting_lockdown_minimal_ratio']
+                    'macron_starting_lockdown_minimal_ratio'
+                ]
                 model_params["macron_stopping_lockdown_minimal_ratio"] = sliders[
-                    'macron_stopping_lockdown_minimal_ratio']
+                    'macron_stopping_lockdown_minimal_ratio'
+                ]
                 model_params["macron_lockdown_severity"] = sliders['macron_lockdown_severity']
             if countries_number == 2:
                 model_params["macron_starting_lockdown_minimal_ratio_1"] = sliders[
-                    'macron_starting_lockdown_minimal_ratio_1']
+                    'macron_starting_lockdown_minimal_ratio_1'
+                ]
                 model_params["macron_stopping_lockdown_minimal_ratio_1"] = sliders[
-                    'macron_stopping_lockdown_minimal_ratio_1']
+                    'macron_stopping_lockdown_minimal_ratio_1'
+                ]
                 model_params["macron_lockdown_severity_1"] = sliders['macron_lockdown_severity_1']
                 model_params["macron_starting_lockdown_minimal_ratio_2"] = sliders[
-                    'macron_starting_lockdown_minimal_ratio_2']
+                    'macron_starting_lockdown_minimal_ratio_2'
+                ]
                 model_params["macron_stopping_lockdown_minimal_ratio_2"] = sliders[
-                    'macron_stopping_lockdown_minimal_ratio_2']
+                    'macron_stopping_lockdown_minimal_ratio_2'
+                ]
                 model_params["macron_lockdown_severity_2"] = sliders['macron_lockdown_severity_2']
             if "market" in display_sliders and display_sliders["market"]:
-                model_params["macron_shut_down_market"] = options['macron_shut_down_market']
+                if countries_number == 1:
+                    model_params["macron_shut_down_market"] = options['macron_shut_down_market']
+                if countries_number == 2:
+                    model_params["macron_shut_down_market_1"] = options['macron_shut_down_market_1']
+                    model_params["macron_shut_down_market_2"] = options['macron_shut_down_market_2']
 
         if "hospital" in display_sliders and display_sliders["hospital"]:
             model_params["hospital"] = options["hospital"]
@@ -93,7 +103,7 @@ class VisualizationService:
                 width=size,
                 height=size,
             )
-            wall_positions = geographic_service.vertical_line_middle_hole_positions()
+            wall_positions = geographic_service.vertical_line_positions()
             model_params["wall_positions"] = wall_positions
 
         if "market" in display_sliders and display_sliders["market"]:
