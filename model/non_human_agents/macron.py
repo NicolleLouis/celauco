@@ -37,6 +37,9 @@ class Macron(BaseNonHuman):
     def get_global_infection_state(self):
         humans = self.get_all_humans()
         humans_number = len(humans)
+        if humans_number == 0:
+            return 0
+
         infected_number = len(
             list(
                 filter(

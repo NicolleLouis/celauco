@@ -6,8 +6,8 @@ class VariantDeathGraphService:
     filename = "single/variant_death"
 
     @classmethod
-    def plot(cls, model, title):
-        raw_data = cls.get_raw_variant_data(model)
+    def plot(cls, source, title, **kwargs):
+        raw_data = cls.get_raw_variant_data(source)
         data, labels = cls.clean_data(raw_data)
         cls.export_graph_in_file(
             data=data,

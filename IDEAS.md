@@ -3,6 +3,7 @@
 ---
 
 Create other human behaviour (take example on gilet_josne.py)
+- Parent (Generate children)
 
 ---
 
@@ -15,7 +16,3 @@ Add Density graph for plot/batch
 
 Add a graph for 2 country splitting death by country (visualization)
 Add graph by country to plot/batch
-
----
-
-Add single graph -> batch

@@ -11,7 +11,12 @@ class Batch:
         self.parameters = parameters
         self.run_number = run_number
         self.data_collector = pd.DataFrame(
-            columns=["Healthy", "Infected", "Dead"]
+            columns=[
+                "Healthy",
+                "Infected",
+                "Dead",
+                "Hospital Occupancy"
+            ]
         )
 
     def run(self):

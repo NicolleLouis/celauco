@@ -7,9 +7,9 @@ class VariantEvolutionGraphService:
     filename = "single/variant_evolution.png"
 
     @classmethod
-    def plot(cls, model, title):
-        raw_data = cls.get_raw_variant_data(model)
-        biggest_infections_name = model.get_biggest_infections_name()
+    def plot(cls, source, title, **kwargs):
+        raw_data = cls.get_raw_variant_data(source)
+        biggest_infections_name = source.get_biggest_infections_name()
         cleaned_data = cls.convert_variant_data(raw_data, biggest_infections_name)
         cls.export_graph_in_file(
             data=cleaned_data,

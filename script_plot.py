@@ -3,22 +3,26 @@ from service.graph_service.single_run.infection_evolution import InfectionEvolut
 from service.graph_service.single_run.variant_death import VariantDeathGraphService
 from service.graph_service.single_run.variant_evolution import VariantEvolutionGraphService
 
-model = CelaucoModel(
-    human_number=4000,
-    width=100,
-    height=100,
-    infection_probability=10,
-    infection_duration=30,
-    death_probability=30,
-    mutation_probability=0,
-    verbose=True,
-    macron=True,
-    macron_parameters={
+parameters = {
+    "human_number": 1,
+    "width": 100,
+    "height": 100,
+    "infection_probability": 10,
+    "infection_duration": 30,
+    "death_probability": 30,
+    "mutation_probability": 0,
+    "verbose": True,
+    "macron": True,
+    "macron_parameters": {
         "starting_lockdown_minimal_ratio": 0.1,
     },
-    market_number=35,
-    businessman_number=0,
-    hospital=False,
+    'market_number': 35,
+    'businessman_number': 0,
+    'hospital': False,
+}
+
+model = CelaucoModel(
+    **parameters
 )
 title = "Test"
 
@@ -31,6 +35,7 @@ graph_services = [
 ]
 for service in graph_services:
     service.plot(
-        model=model,
-        title=title
+        source=model,
+        title=title,
+        parameters=parameters,
     )

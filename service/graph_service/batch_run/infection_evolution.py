@@ -1,52 +1,22 @@
 import matplotlib.pyplot as plt
 import seaborn as sns
 
+from service.graph_service.data_collector_graph import DataCollectorGraphService
 
-class InfectionEvolutionBatchGraphService:
-    filename = "batch/infection_evolution"
 
-    @classmethod
-    def plot(cls, batch, title):
-        raw_df = cls.get_raw_variant_data(batch)
-        cleaned_df = cls.clean_data(raw_df)
-        cls.export_graph_in_file(data=cleaned_df, title=title)
-
+class InfectionEvolutionBatchGraphService(DataCollectorGraphService):
     @staticmethod
     def get_raw_variant_data(batch):
         return batch.data_collector
 
     @staticmethod
-    def clean_data(raw_df):
+    def generate_filename(filename):
+        return "batch/{}".format(filename)
+
+    @staticmethod
+    def clean_data(raw_df, values):
         cleaned_df = raw_df.rename_axis('Turn Number')
         cleaned_df = cleaned_df.reset_index()
-        cleaned_df = cleaned_df.melt(id_vars=['Turn Number'], value_vars=[
-            'Healthy',
-            'Infected',
-            'Dead'
-        ])
+        cleaned_df = cleaned_df.melt(id_vars=['Turn Number'], value_vars=values)
         return cleaned_df
 
-    @classmethod
-    def export_graph_in_file(
-            cls,
-            data,
-            title
-    ):
-        plt.figure()
-        palette = {
-            "Healthy": "tab:green",
-            "Infected": "tab:red",
-            "Dead": "tab:grey"
-        }
-        ax = sns.lineplot(
-            x="Turn Number",
-            y="value",
-            hue="variable",
-            palette=palette,
-            data=data,
-        )
-        ax.set(
-            ylabel="Human Number",
-            title=title,
-        )
-        plt.savefig('graph/{}'.format(cls.filename))
