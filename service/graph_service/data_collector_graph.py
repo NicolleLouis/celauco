@@ -21,6 +21,12 @@ class DataCollectorGraphService:
                     'Dead'
                 ]
             },
+            {
+                "filename": cls.generate_filename("infected"),
+                "values": [
+                    'Infected',
+                ]
+            },
         ]
         if "hospital" in parameters and parameters["hospital"]:
             combinations.append(
@@ -29,6 +35,25 @@ class DataCollectorGraphService:
                     "values": [
                         'Hospital Occupancy',
                         'Dead'
+                    ]
+                }
+            )
+        if "countries_number" in parameters and parameters["countries_number"] == 1:
+            combinations.append(
+                {
+                    "filename": cls.generate_filename("density"),
+                    "values": [
+                        'Density',
+                    ]
+                }
+            )
+        if "countries_number" in parameters and parameters["countries_number"] == 2:
+            combinations.append(
+                {
+                    "filename": cls.generate_filename("density"),
+                    "values": [
+                        'Density (Left)',
+                        'Density (Right)',
                     ]
                 }
             )
@@ -75,6 +100,9 @@ class DataCollectorGraphService:
             "Infected": "tab:red",
             "Dead": "tab:grey",
             "Hospital Occupancy": "tab:blue",
+            "Density": "tab:blue",
+            "Density (Left)": "#224A979C",
+            "Density (Right)": "#1143A0",
         }
         ax = sns.lineplot(
             x="Turn Number",
