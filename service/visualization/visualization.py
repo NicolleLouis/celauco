@@ -30,12 +30,21 @@ class VisualizationService:
             walls=walls,
             countries_number=countries_number,
         )
-        server = ModularServer(
-            model_cls=VisualizationModel,
-            visualization_elements=[grid, cls.get_charts(
+        charts = cls.get_charts(
                 display_sliders=display_sliders,
                 countries_number=countries_number,
-            )],
+            )
+        density_charts = cls.get_density_charts(
+            display_sliders=display_sliders,
+            countries_number=countries_number,
+        )
+        server = ModularServer(
+            model_cls=VisualizationModel,
+            visualization_elements=[
+                grid,
+                charts,
+                density_charts
+            ],
             model_params=model_params
         )
         server.port = 8521
@@ -105,6 +114,7 @@ class VisualizationService:
             geographic_service = GeographicService(
                 width=size,
                 height=size,
+                model=None,
             )
             wall_positions = geographic_service.vertical_line_positions()
             model_params["wall_positions"] = wall_positions
@@ -146,6 +156,31 @@ class VisualizationService:
             chart_list.append({
                 "Label": "Infected (Right)",
                 "Color": "#112BDF"
+            })
+
+        charts = ChartModule(
+            chart_list,
+            data_collector_name='graph_collector'
+        )
+        return charts
+
+    @staticmethod
+    def get_density_charts(display_sliders, countries_number):
+        chart_list = []
+        if countries_number == 1:
+            chart_list.append({
+                "Label": "Density",
+                "Color": "Green"
+            })
+
+        if countries_number == 2:
+            chart_list.append({
+                "Label": "Density (Left)",
+                "Color": "#12791370"
+            })
+            chart_list.append({
+                "Label": "Density (Right)",
+                "Color": "#095D0A"
             })
 
         charts = ChartModule(

@@ -2,9 +2,9 @@ from service.visualization.visualization import VisualizationService
 
 VisualizationService.display_model(
     size=100,
-    walls=True,
+    walls=False,
     display_sliders={
-        "infection": False,
+        "infection": True,
         "macron": True,
         "hospital": False,
         "market": False,

@@ -2,13 +2,15 @@ from model.country import Country
 
 
 class GeographicService:
-    def __init__(self, width, height):
+    def __init__(self, width, height, model):
         self.width = width
         self.height = height
+        self.model = model
 
     def generate_countries(self, countries_number=1):
         if countries_number == 1:
             country = Country(
+                model=self.model,
                 position_bottom_left=(0, 0),
                 position_top_right=(self.width, self.height)
             )
@@ -16,10 +18,12 @@ class GeographicService:
         if countries_number == 2:
             middle_width = int(self.width/2)
             country_1 = Country(
+                model=self.model,
                 position_bottom_left=(0, 0),
                 position_top_right=(middle_width, self.height)
             )
             country_2 = Country(
+                model=self.model,
                 position_bottom_left=(middle_width + 1, 0),
                 position_top_right=(self.width, self.height)
             )

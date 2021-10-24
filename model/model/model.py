@@ -52,7 +52,8 @@ class CelaucoModel(Model):
         )
         self.countries = GeographicService(
             width=width,
-            height=height
+            height=height,
+            model=self,
         ).generate_countries(
             countries_number=countries_number
         )
@@ -103,12 +104,12 @@ class CelaucoModel(Model):
             initially_infected,
             **kwargs,
     ):
-        self.agent_generator = AgentGenerator(
+        agent_generator = AgentGenerator(
             model=self,
             grid=self.grid,
             schedule=self.schedule
         )
-        self.agent_generator.initialise_agents(
+        agent_generator.initialise_agents(
             human_number=human_number,
             **kwargs
         )
