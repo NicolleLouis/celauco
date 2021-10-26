@@ -197,6 +197,13 @@ class BaseHuman(Agent):
         """
         pass
 
+    def end_step(self):
+        """
+        function used to print data at the end of the model run, should be mostly empty for humans
+        :return:
+        """
+        pass
+
     def display(self):
         """
         Documentation is in the class: CanvasGrid(VisualizationElement)

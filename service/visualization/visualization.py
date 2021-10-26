@@ -66,6 +66,7 @@ class VisualizationService:
             "height": size,
             "maximum_number_of_turn": 10000,
             "countries_number": countries_number,
+            "verbose": True,
         }
 
         if "infection" in display_sliders and display_sliders["infection"]:

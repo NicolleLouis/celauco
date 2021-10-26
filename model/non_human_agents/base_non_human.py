@@ -19,3 +19,6 @@ class BaseNonHuman(Agent):
 
     def display(self):
         raise NotImplementedError("Should detail its own display if needed")
+
+    def end_step(self):
+        raise NotImplementedError("Non human should have an end step to display statistics")

@@ -39,3 +39,4 @@ class Infection:
         print("Mutation probability: {}".format(self.mutation_probability))
         print("Score: {}".format(self.infection_score))
         print("Victim number: {}".format(self.victim_number))
+        print("#####")

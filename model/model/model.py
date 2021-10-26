@@ -98,6 +98,8 @@ class CelaucoModel(Model):
             print('######')
             print("number of dead: {}".format(self.number_of_dead))
             self.display_biggest_infections()
+            for agent in self.schedule.agents:
+                agent.end_step()
 
     def initialise_agents(
             self,
