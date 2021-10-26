@@ -78,7 +78,7 @@ class BaseHuman(Agent):
         self.infection.infection_score += 1
         # Immunity
         if self.infection_duration >= self.infection.infection_duration:
-            self.set_immune(self.infection)
+            self.set_cured()
         # Death
         else:
             if ProbabilityService.random_probability_1000(self.infection.death_probability):
@@ -128,12 +128,17 @@ class BaseHuman(Agent):
     def is_immune(self, infection):
         return infection.infection_id in self.immunity
 
-    def set_immune(self, infection):
+    def set_cured(self):
         if self.infection_state != InfectionState.INFECTED:
             raise SystemError("A non infected agent cannot become immune")
         self.infection_state = InfectionState.HEALTHY
+        self.set_immune(self.infection)
+
+    def set_immune(self, infection):
         if infection.infection_id not in self.immunity:
             self.immunity.append(infection.infection_id)
+            return True
+        return False
 
     def set_dead(self):
         if self.infection_state != InfectionState.INFECTED:

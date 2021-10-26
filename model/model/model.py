@@ -40,6 +40,7 @@ class CelaucoModel(Model):
             - market_number: int
             - wall_positions: list(pos)
             - hospital: bool
+            - vaccination_center_number: int
         Log paramaters:
             - log_variant_info: default = True
         """

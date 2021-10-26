@@ -5,10 +5,11 @@ VisualizationService.display_model(
     walls=False,
     display_sliders={
         "infection": True,
-        "macron": True,
+        "macron": False,
         "hospital": False,
         "market": False,
-        "other_humans": True,
+        "other_humans": False,
+        "vaccination_center": True,
     },
     countries_number=1,
 )

@@ -5,6 +5,7 @@ from model.human_agents.gilet_josne import GiletJosne
 from model.non_human_agents.hospital import Hospital
 from model.non_human_agents.macron import Macron
 from model.non_human_agents.market import Market
+from model.non_human_agents.vaccination_center import VaccinationCenter
 from model.non_human_agents.wall import Wall
 from model.human_agents.businessman import BusinessMan
 
@@ -40,6 +41,7 @@ class AgentGenerator:
             "market_number": Market,
             "wall_positions": Wall,
             "hospital": Hospital,
+            "vaccination_center_number": VaccinationCenter,
         }
 
         custom_generation_function = {

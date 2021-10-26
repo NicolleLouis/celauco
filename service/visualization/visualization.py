@@ -122,6 +122,9 @@ class VisualizationService:
         if "market" in display_sliders and display_sliders["market"]:
             model_params["market_number"] = sliders["market_number"]
 
+        if "vaccination_center" in display_sliders and display_sliders["vaccination_center"]:
+            model_params["vaccination_center_number"] = sliders["vaccination_center_number"]
+
         if "other_humans" in display_sliders and display_sliders["other_humans"]:
             model_params["gilet_josne_number"] = sliders["gilet_josne_number"]
             model_params["businessman_number"] = sliders["businessman_number"]

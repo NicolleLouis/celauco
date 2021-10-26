@@ -28,7 +28,7 @@ class Hospital(BaseNonHuman):
         raw_agent.infection.infection_score += 1
         # Immunity
         if raw_agent.infection_duration >= raw_agent.infection.infection_duration:
-            raw_agent.set_immune(raw_agent.infection)
+            raw_agent.set_cured()
             self.leave_hospital_immune(agent=agent)
 
         # Death

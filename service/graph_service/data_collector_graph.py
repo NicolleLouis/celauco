@@ -1,6 +1,8 @@
 import matplotlib.pyplot as plt
 import seaborn as sns
 
+from constants.colors import dark_green, dark_blue, light_blue, light_green
+
 
 class DataCollectorGraphService:
     @classmethod
@@ -57,6 +59,15 @@ class DataCollectorGraphService:
                     ]
                 }
             )
+            combinations.append(
+                {
+                    "filename": cls.generate_filename("infected_by_country"),
+                    "values": [
+                        'Infected (Left)',
+                        'Infected (Right)',
+                    ]
+                }
+            )
 
         return combinations
 
@@ -101,8 +112,10 @@ class DataCollectorGraphService:
             "Dead": "tab:grey",
             "Hospital Occupancy": "tab:blue",
             "Density": "tab:blue",
-            "Density (Left)": "#224A979C",
-            "Density (Right)": "#1143A0",
+            "Density (Left)": dark_green,
+            "Density (Right)": dark_blue,
+            "Infected (Right)": light_blue,
+            "Infected (Left)": light_green,
         }
         ax = sns.lineplot(
             x="Turn Number",

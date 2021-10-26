@@ -60,6 +60,13 @@ class SliderService:
             min_value=0,
             max_value=size,
         )
+        vaccination_center_number = UserSettableParameter(
+            param_type="slider",
+            name="Vaccination Center Number",
+            value=0,
+            min_value=0,
+            max_value=size,
+        )
         macron_starting_lockdown_minimal_ratio = UserSettableParameter(
             param_type="slider",
             name="Lockdown Start Ratio",
@@ -147,6 +154,7 @@ class SliderService:
             "businessman_number": businessman_number,
             "mutation_probability": mutation_probability,
             "market_number": market_number,
+            "vaccination_center_number": vaccination_center_number,
             "macron_starting_lockdown_minimal_ratio": macron_starting_lockdown_minimal_ratio,
             "macron_stopping_lockdown_minimal_ratio": macron_stopping_lockdown_minimal_ratio,
             "macron_lockdown_severity": macron_lockdown_severity,

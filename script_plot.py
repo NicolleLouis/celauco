@@ -11,7 +11,7 @@ wall_positions = GeographicService(
 ).vertical_line_positions()
 
 parameters = {
-    "human_number": 2000,
+    "human_number": 3000,
     "width": 100,
     "height": 100,
     "infection_probability": 10,
@@ -19,12 +19,17 @@ parameters = {
     "death_probability": 30,
     "mutation_probability": 0,
     "verbose": True,
-    "macron": False,
-    "macron_parameters": {
-        "starting_lockdown_minimal_ratio": 0.1,
-    },
-    'market_number': 35,
-    'businessman_number': 0,
+    "macron": True,
+    "macron_parameters": [
+        {
+            "lockdown_severity": 100
+        },
+        {
+            "lockdown_severity": 60
+        },
+    ],
+    'market_number': 50,
+    'businessman_number': 25,
     'hospital': False,
     "countries_number": 2,
     "wall_positions": wall_positions
@@ -33,7 +38,8 @@ parameters = {
 model = CelaucoModel(
     **parameters
 )
-title = "Test"
+
+title = 'Left side lockdown/Right side curfew'
 
 model.run_model()
 
