@@ -1,6 +1,3 @@
-import matplotlib.pyplot as plt
-import seaborn as sns
-
 from service.graph_service.data_collector_graph import DataCollectorGraphService
 
 

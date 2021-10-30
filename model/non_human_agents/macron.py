@@ -103,3 +103,6 @@ class Macron(BaseNonHuman):
 
     def display(self):
         return {}
+
+    def end_step(self):
+        pass

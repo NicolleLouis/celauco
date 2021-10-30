@@ -53,6 +53,9 @@ class Market(BaseNonHuman):
     def set_closed(self):
         self.is_open = False
 
+    def end_step(self):
+        pass
+
     def set_open(self):
         self.is_open = True
 

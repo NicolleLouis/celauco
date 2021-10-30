@@ -16,3 +16,6 @@ class Wall(BaseNonHuman):
         }
 
         return data
+
+    def end_step(self):
+        pass

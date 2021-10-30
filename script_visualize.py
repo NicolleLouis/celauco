@@ -1,15 +1,15 @@
 from service.visualization.visualization import VisualizationService
 
 VisualizationService.display_model(
-    size=100,
-    walls=False,
+    size=25,
+    walls=True,
     display_sliders={
         "infection": True,
-        "macron": False,
+        "macron": True,
         "hospital": False,
-        "market": False,
-        "other_humans": False,
-        "vaccination_center": True,
+        "market": True,
+        "other_humans": True,
+        "vaccination_center": False,
     },
-    countries_number=1,
+    countries_number=2,
 )

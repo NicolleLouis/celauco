@@ -7,6 +7,8 @@ class Hospital(BaseNonHuman):
         super().__init__(unique_id, model)
         self.add_hospital_callback_to_all_human()
         self.agents_in_hospital = []
+        self.human_death = 0
+        self.human_saved = 0
 
         self.hospital_bed = hospital_bed
 
@@ -40,10 +42,12 @@ class Hospital(BaseNonHuman):
         self.model.schedule.add(agent["agent"])
         self.model.grid.place_agent(agent["agent"], agent["position"])
         self.agents_in_hospital.remove(agent)
+        self.human_saved += 1
 
     def hospital_death(self, agent):
         agent["agent"].update_death_data()
         self.agents_in_hospital.remove(agent)
+        self.human_death += 1
 
     def remove_from_hospital(self, agent):
         self.agents_in_hospital.remove(agent)
@@ -68,3 +72,9 @@ class Hospital(BaseNonHuman):
 
     def display(self):
         return {}
+
+    def end_step(self):
+        print("#####")
+        print("Human saved: {}".format(self.human_saved))
+        print("Human death in hospital: {}".format(self.human_death))
+        print("#####")
