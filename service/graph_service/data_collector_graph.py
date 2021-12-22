@@ -129,3 +129,4 @@ class DataCollectorGraphService:
             title=title
         )
         plt.savefig('graph/{}'.format(filename))
+        data.to_csv('graph/{}.csv'.format(filename))

@@ -11,15 +11,15 @@ wall_positions = GeographicService(
 ).vertical_line_positions()
 
 parameters = {
-    "human_number": 2950,
+    "human_number": 3000,
     "width": 100,
     "height": 100,
     "infection_probability": 10,
-    "infection_duration": 50,
-    "death_probability": 3,
+    "infection_duration": 30,
+    "death_probability": 1,
     "mutation_probability": 0,
     "verbose": True,
-    "macron": True,
+    "macron": False,
     "macron_parameters": [
         {
             "lockdown_severity": 100,
@@ -34,14 +34,14 @@ parameters = {
     ],
     'market_number': 20,
     'businessman_number': 50,
-    'hospital': True,
+    'hospital': False,
     "hospital_parameters": {
         'hospital_bed': 30,
     },
-    "countries_number": 2,
-    "wall_positions": wall_positions
+    "countries_number": 1,
+    # "wall_positions": wall_positions
 }
-title = "Country co-evolution"
+title = "Test Edouard"
 
 model = CelaucoModel(
     **parameters
